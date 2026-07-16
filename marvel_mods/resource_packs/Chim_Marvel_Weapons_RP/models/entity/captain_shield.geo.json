@@ -3,7 +3,7 @@
   "minecraft:geometry": [{
     "description": { "identifier": "geometry.chim_marvel.captain_shield", "texture_width": 64, "texture_height": 64, "visible_bounds_width": 3, "visible_bounds_height": 3, "visible_bounds_offset": [0, 0.5, 0] },
     "bones": [{
-      "name": "weapon", "pivot": [0, 0, 0], "binding": "q.item_slot_to_bone_name(c.item_slot)",
+      "name": "weapon", "pivot": [0, 0, 0], "binding": "q.item_slot_to_bone_name(context.item_slot)",
       "cubes": [
         { "origin": [-7, 1, -1], "size": [14, 14, 2], "uv": [0, 0] },
         { "origin": [-9, 4, -0.75], "size": [18, 8, 1.5], "uv": [0, 18] },

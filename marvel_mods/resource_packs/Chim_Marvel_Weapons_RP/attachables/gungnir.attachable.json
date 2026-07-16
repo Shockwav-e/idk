@@ -1,5 +1,5 @@
 {
-  "format_version": "1.10.0",
+  "format_version": "1.26.0",
   "minecraft:attachable": {
     "description": {
       "identifier": "chim_marvel:gungnir",

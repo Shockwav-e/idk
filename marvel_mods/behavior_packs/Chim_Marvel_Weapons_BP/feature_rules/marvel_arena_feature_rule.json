@@ -1,0 +1,24 @@
+{
+  "format_version": "1.26.0",
+  "minecraft:feature_rules": {
+    "description": {
+      "identifier": "chim_marvel:marvel_arena_feature_rule",
+      "places_feature": "chim_marvel:marvel_arena_feature"
+    },
+    "conditions": {
+      "placement_pass": "surface_pass",
+      "minecraft:biome_filter": {
+        "test": "has_biome_tag",
+        "operator": "==",
+        "value": "overworld"
+      }
+    },
+    "distribution": {
+      "iterations": 1,
+      "scatter_chance": { "numerator": 1, "denominator": 1800 },
+      "x": { "distribution": "uniform", "extent": [0, 15] },
+      "y": "query.heightmap(variable.worldx, variable.worldz)",
+      "z": { "distribution": "uniform", "extent": [0, 15] }
+    }
+  }
+}

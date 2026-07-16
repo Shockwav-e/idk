@@ -1,0 +1,28 @@
+{
+  "entity_sounds": {
+    "entities": {
+      "chim_marvel:hai_sieu_xau_quac": {
+        "volume": 1.1,
+        "pitch": [0.72, 0.88],
+        "events": {
+          "ambient": "mob.cat.meow",
+          "hurt": "mob.cat.hurt",
+          "death": "mob.cat.death",
+          "step": "mob.cat.purr",
+          "attack": "mob.ravager.roar"
+        }
+      },
+      "chim_marvel:war_cat": {
+        "volume": 0.8,
+        "pitch": [0.9, 1.12],
+        "events": {
+          "ambient": "mob.cat.meow",
+          "hurt": "mob.cat.hurt",
+          "death": "mob.cat.death",
+          "step": "mob.cat.purr",
+          "attack": "mob.cat.hiss"
+        }
+      }
+    }
+  }
+}

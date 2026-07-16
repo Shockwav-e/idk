@@ -1,9 +1,9 @@
 {
-  "format_version": "1.21.120",
+  "format_version": "1.26.0",
   "minecraft:item": {
     "description": { "identifier": "chim_marvel:mjolnir", "menu_category": { "category": "equipment", "group": "itemGroup.name.sword" } },
     "components": {
-      "minecraft:icon": { "texture": "mjolnir" },
+      "minecraft:icon": { "textures": { "default": "mjolnir" } },
       "minecraft:display_name": { "value": "§bMjolnir" },
       "minecraft:hover_text_color": "aqua",
       "minecraft:rarity": "epic",
@@ -11,7 +11,7 @@
       "minecraft:damage": 30,
       "minecraft:enchantable": { "value": 20, "slot": "sword" },
       "minecraft:tags": { "tags": ["minecraft:is_sword"] },
-      "minecraft:cooldown": { "category": "chim_mjolnir", "duration": 0.8 },
+      "minecraft:cooldown": { "category": "chim_mjolnir", "duration": 0.05 },
       "minecraft:use_animation": "spear",
       "minecraft:use_modifiers": { "use_duration": 0.15, "movement_modifier": 0.8 },
       "minecraft:hand_equipped": true,

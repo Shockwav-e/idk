@@ -4,7 +4,14 @@
     "identifier": "chim_marvel:hai_sieu_xau_quac", "materials": { "default": "entity_alphatest" },
     "spawn_egg": { "base_color": "#F4EEE3", "overlay_color": "#17151B" },
     "textures": { "default": "textures/entity/hai_sieu_xau_quac" }, "geometry": { "default": "geometry.chim_marvel.hai_sieu_xau_quac" },
-    "animations": { "walk": "animation.chim_marvel.cat_walk" }, "scripts": { "animate": ["walk"] },
+    "animations": {
+      "idle": "animation.chim_marvel.cat_idle",
+      "walk": "animation.chim_marvel.cat_walk",
+      "sit": "animation.chim_marvel.cat_sit",
+      "attack": "animation.chim_marvel.cat_attack",
+      "death": "animation.chim_marvel.cat_death",
+      "locomotion": "controller.animation.chim_marvel.cat_locomotion"
+    }, "scripts": { "animate": ["locomotion"] },
     "render_controllers": ["controller.render.default"]
   } }
 }

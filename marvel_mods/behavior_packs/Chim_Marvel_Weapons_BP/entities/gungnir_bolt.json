@@ -1,10 +1,10 @@
 {
-  "format_version": "1.21.120",
+  "format_version": "1.26.0",
   "minecraft:entity": {
     "description": { "identifier": "chim_marvel:gungnir_bolt", "is_spawnable": false, "is_summonable": true },
     "components": {
       "minecraft:collision_box": { "width": 0.2, "height": 0.2 },
-      "minecraft:projectile": { "gravity": 0, "power": 4.0, "knockback": true, "multiple_targets": false },
+      "minecraft:projectile": { "gravity": 0, "power": 4.0, "knockback": true, "multiple_targets": true },
       "minecraft:physics": { "has_gravity": false },
       "minecraft:pushable": { "is_pushable": false, "is_pushable_by_piston": false },
       "minecraft:timer": { "time": 4, "time_down_event": { "event": "chim_marvel:despawn" } }

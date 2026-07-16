@@ -1,9 +1,9 @@
 {
-  "format_version": "1.21.120",
+  "format_version": "1.26.0",
   "minecraft:item": {
     "description": { "identifier": "chim_marvel:stormbreaker", "menu_category": { "category": "equipment", "group": "itemGroup.name.sword" } },
     "components": {
-      "minecraft:icon": { "texture": "stormbreaker" },
+      "minecraft:icon": { "textures": { "default": "stormbreaker" } },
       "minecraft:display_name": { "value": "§3Stormbreaker" },
       "minecraft:hover_text_color": "aqua",
       "minecraft:rarity": "epic",
@@ -11,7 +11,7 @@
       "minecraft:damage": 42,
       "minecraft:enchantable": { "value": 18, "slot": "sword" },
       "minecraft:tags": { "tags": ["minecraft:is_sword"] },
-      "minecraft:cooldown": { "category": "chim_stormbreaker", "duration": 0.9 },
+      "minecraft:cooldown": { "category": "chim_stormbreaker", "duration": 0.05 },
       "minecraft:use_animation": "spear",
       "minecraft:use_modifiers": { "use_duration": 0.15, "movement_modifier": 0.75 },
       "minecraft:hand_equipped": true,

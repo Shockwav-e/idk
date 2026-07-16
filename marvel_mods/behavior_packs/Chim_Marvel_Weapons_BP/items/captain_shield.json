@@ -1,9 +1,9 @@
 {
-  "format_version": "1.21.120",
+  "format_version": "1.26.0",
   "minecraft:item": {
     "description": { "identifier": "chim_marvel:captain_shield", "menu_category": { "category": "equipment", "group": "itemGroup.name.shield" } },
     "components": {
-      "minecraft:icon": { "texture": "captain_shield" },
+      "minecraft:icon": { "textures": { "default": "captain_shield" } },
       "minecraft:display_name": { "value": "§9Captain's Shield" },
       "minecraft:hover_text_color": "blue",
       "minecraft:rarity": "epic",
@@ -14,7 +14,7 @@
       "minecraft:allow_off_hand": true,
       "minecraft:wearable": { "slot": "slot.weapon.offhand", "protection": 0 },
       "minecraft:damage_absorption": { "absorbable_causes": ["anvil", "blockExplosion", "charging", "contact", "entityAttack", "entityExplosion", "fallingBlock", "fireworks", "lightning", "magic", "magma", "projectile", "ramAttack", "sonicBoom", "stalactite", "stalagmite", "thorns", "wither"] },
-      "minecraft:cooldown": { "category": "chim_shield", "duration": 1.0 },
+      "minecraft:cooldown": { "category": "chim_shield", "duration": 0.05 },
       "minecraft:use_animation": "spear",
       "minecraft:use_modifiers": { "use_duration": 0.12, "movement_modifier": 0.9 },
       "minecraft:interact_button": "Throw Shield"

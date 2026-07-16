@@ -1,5 +1,5 @@
 {
-  "format_version": "1.21.120",
+  "format_version": "1.26.0",
   "minecraft:recipe_shaped": {
     "description": { "identifier": "chim_marvel:captain_shield" },
     "unlock": [{ "item": "chim_marvel:vibranium" }],

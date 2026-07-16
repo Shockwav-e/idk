@@ -2,6 +2,9 @@ import { world, system, ItemStack, EquipmentSlot } from "@minecraft/server";
 
 const NS = "chim_marvel";
 const activeThrows = new Map();
+const activeThrowByPlayer = new Map();
+const energyShots = new Map();
+const lastStormSpinByPlayer = new Map();
 const projectileStats = new Map();
 const bossTimers = new Map();
 const heldWeaponByPlayer = new Map();
@@ -47,11 +50,8 @@ const HOLD_BUFFS = {
   ],
 };
 const COOLDOWN_TICKS = {
-  mjolnir_throw: 50,
   mjolnir_lightning: 60,
-  stormbreaker_throw: 60,
   stormbreaker_lightning: 60,
-  shield_throw: 40,
   gungnir_bolt: 40,
 };
 let thunderResetRun = 0;
@@ -75,6 +75,60 @@ function tell(player, text) {
   try {
     player.sendMessage(text);
   } catch {}
+}
+
+const SOUND_LAYERS = {
+  mjolnir_throw: [["item.trident.throw", 1.1, 0.72], ["random.explode", 0.2, 1.7]],
+  mjolnir_recall: [["item.trident.return", 1.0, 0.72], ["ambient.weather.thunder", 0.12, 1.8]],
+  stormbreaker_throw: [["item.trident.riptide_3", 0.8, 0.72], ["item.trident.throw", 1.2, 0.55]],
+  stormbreaker_recall: [["item.trident.return", 1.2, 0.55], ["item.trident.riptide_2", 0.45, 0.8]],
+  shield_throw: [["item.trident.throw", 0.8, 1.35], ["random.bow", 0.7, 0.7]],
+  shield_bounce: [["random.anvil_land", 0.35, 1.8], ["random.orb", 0.55, 0.7]],
+  shield_recall: [["item.trident.return", 0.8, 1.3], ["random.anvil_land", 0.3, 1.45]],
+  gungnir_impact: [["mob.evocation_illager.cast_spell", 0.8, 1.8], ["random.explode", 0.35, 1.4]],
+  weapon_impact: [["random.explode", 0.7, 1.15], ["item.trident.hit_ground", 0.9, 0.7]],
+};
+
+function playWeaponSound(dimension, cue, location) {
+  for (const [sound, volume, pitch] of SOUND_LAYERS[cue] ?? []) {
+    try { dimension.playSound(sound, location, { volume, pitch }); } catch {}
+  }
+}
+
+function particle(dimension, id, location) {
+  try { dimension.spawnParticle(id, location); } catch {}
+}
+
+function impactEffect(projectile, type) {
+  const { dimension, location } = projectile;
+  if (type === "gungnir") {
+    particle(dimension, "minecraft:totem_particle", location);
+    particle(dimension, "minecraft:critical_hit_emitter", location);
+    playWeaponSound(dimension, "gungnir_impact", location);
+    return;
+  }
+  particle(dimension, "minecraft:large_explosion", location);
+  particle(dimension, type === "shield" ? "minecraft:critical_hit_emitter" : "minecraft:electric_spark_particle", location);
+  if (type === "mjolnir" || type === "stormbreaker") {
+    try { dimension.spawnEntity("minecraft:lightning_bolt", location); } catch {}
+  }
+  playWeaponSound(dimension, type === "shield" ? "shield_bounce" : "weapon_impact", location);
+}
+
+function releaseThrow(state, caught = false) {
+  if (!state) return;
+  try {
+    if (caught) {
+      const cue = state.type === "shield" ? "shield_recall" : `${state.type}_recall`;
+      playWeaponSound(state.owner.dimension, cue, state.owner.location);
+      particle(state.owner.dimension, "minecraft:electric_spark_particle", state.owner.getHeadLocation());
+      state.owner.onScreenDisplay.setActionBar("§aWeapon caught — throw ready.");
+    }
+    if (valid(state.projectile)) state.projectile.remove();
+  } catch {}
+  activeThrows.delete(state.projectile?.id);
+  projectileStats.delete(state.projectile?.id);
+  if (activeThrowByPlayer.get(state.owner?.id) === state) activeThrowByPlayer.delete(state.owner.id);
 }
 
 function tryWeaponCooldown(player, attack) {
@@ -180,19 +234,27 @@ function beginThunder(player, power) {
 }
 
 function launch(player, type, itemStack) {
+  if (type !== "gungnir" && activeThrowByPlayer.has(player.id)) {
+    player.onScreenDisplay.setActionBar(
+      "§cCatch your active weapon before throwing again.",
+    );
+    return false;
+  }
   const ids = {
     mjolnir: `${NS}:mjolnir_projectile`,
     stormbreaker: `${NS}:stormbreaker_projectile`,
     shield: `${NS}:shield_projectile`,
     gungnir: `${NS}:gungnir_bolt`,
   };
-  const speeds = { mjolnir: 1.9, stormbreaker: 2.1, shield: 2.2, gungnir: 3.6 };
+  const speeds = { mjolnir: 1.25, stormbreaker: 1.35, shield: 1.65, gungnir: 4.5 };
   const head = player.getHeadLocation();
   const view = player.getViewDirection();
+  const horizontal = normalize({ x: view.x, y: 0, z: view.z });
+  const direction = type === "gungnir" ? normalize(view) : horizontal;
   const start = {
-    x: head.x + view.x * 1.2,
-    y: head.y + view.y * 1.2,
-    z: head.z + view.z * 1.2,
+    x: head.x + direction.x * 1.35,
+    y: head.y - 0.2,
+    z: head.z + direction.z * 1.35,
   };
   try {
     const projectile = player.dimension.spawnEntity(ids[type], start);
@@ -200,21 +262,35 @@ function launch(player, type, itemStack) {
     component.owner = player;
     const speed = speeds[type];
     component.shoot(
-      { x: view.x * speed, y: view.y * speed, z: view.z * speed },
+      { x: direction.x * speed, y: direction.y * speed, z: direction.z * speed },
       { uncertainty: 0 },
     );
     const stats = readEnchantments(itemStack);
     projectileStats.set(projectile.id, stats);
     if (type !== "gungnir") {
-      activeThrows.set(projectile.id, {
+      const state = {
         projectile,
         owner: player,
         type,
+        direction,
+        speed,
         age: 0,
         returning: false,
         hits: new Set(),
         loyalty: stats.loyalty,
-      });
+      };
+      activeThrows.set(projectile.id, state);
+      activeThrowByPlayer.set(player.id, state);
+      if (type === "stormbreaker") {
+        try {
+          const previous = lastStormSpinByPlayer.get(player.id) ?? Math.floor(Math.random() * 4);
+          const spin = (previous + 1 + Math.floor(Math.random() * 3)) % 4;
+          lastStormSpinByPlayer.set(player.id, spin);
+          projectile.setProperty("chim_marvel:spin_style", spin);
+        } catch {}
+      }
+    } else {
+      energyShots.set(projectile.id, { projectile, owner: player, age: 0 });
     }
     const damage = THROW_DAMAGE[projectile.typeId] ?? 0;
     player.onScreenDisplay.setActionBar(
@@ -230,9 +306,14 @@ function launch(player, type, itemStack) {
           { volume: 1, pitch: 1.6 },
         );
       } catch {}
+    } else {
+      playWeaponSound(player.dimension, `${type}_throw`, start);
     }
+    return true;
   } catch (error) {
     tell(player, `§cWeapon failed to launch: ${error}`);
+    activeThrowByPlayer.delete(player.id);
+    return false;
   }
 }
 
@@ -241,26 +322,21 @@ function useWeapon(event) {
   const id = event.itemStack?.typeId;
   if (!player || !id) return;
   if (id === `${NS}:mjolnir`) {
-    const attack = player.isSneaking ? "mjolnir_lightning" : "mjolnir_throw";
-    if (!tryWeaponCooldown(player, attack)) return;
-    if (player.isSneaking) beginThunder(player, "mjolnir");
+    if (player.isSneaking) {
+      if (!tryWeaponCooldown(player, "mjolnir_lightning")) return;
+      beginThunder(player, "mjolnir");
+    }
     else launch(player, "mjolnir", event.itemStack);
   } else if (id === `${NS}:stormbreaker`) {
-    const attack = player.isSneaking
-      ? "stormbreaker_lightning"
-      : "stormbreaker_throw";
-    if (!tryWeaponCooldown(player, attack)) return;
-    if (player.isSneaking) beginThunder(player, "stormbreaker");
+    if (player.isSneaking) {
+      if (!tryWeaponCooldown(player, "stormbreaker_lightning")) return;
+      beginThunder(player, "stormbreaker");
+    }
     else launch(player, "stormbreaker", event.itemStack);
   } else if (id === `${NS}:captain_shield`) {
-    if (!tryWeaponCooldown(player, "shield_throw")) return;
     launch(player, "shield", event.itemStack);
   } else if (id === `${NS}:gungnir`) {
     if (!tryWeaponCooldown(player, "gungnir_bolt")) return;
-    // Clear any lingering thunder weather before Gungnir fires
-    try {
-      world.getDimension("overworld").runCommand("weather clear");
-    } catch {}
     launch(player, "gungnir", event.itemStack);
   }
 }
@@ -325,8 +401,9 @@ world.afterEvents.projectileHitEntity.subscribe((event) => {
         hit.dimension.spawnEntity("minecraft:lightning_bolt", hit.location);
     } catch {}
   }
+  impactEffect(event.projectile, state?.type ?? (event.projectile?.typeId === `${NS}:gungnir_bolt` ? "gungnir" : "other"));
   if (!state) {
-    projectileStats.delete(event.projectile?.id);
+    if (!energyShots.has(event.projectile?.id)) projectileStats.delete(event.projectile?.id);
     return;
   }
   if (hit) state.hits.add(hit.id);
@@ -344,12 +421,12 @@ world.afterEvents.projectileHitEntity.subscribe((event) => {
             event.projectile.location,
           ),
         );
-        event.projectile
-          .getComponent("minecraft:projectile")
-          .shoot(
-            { x: aim.x * 2.4, y: aim.y * 2.4, z: aim.z * 2.4 },
-            { uncertainty: 0 },
-          );
+        const ricochet = event.projectile.getComponent("minecraft:projectile");
+        if (!ricochet) throw new Error("Shield projectile component unavailable");
+        ricochet.shoot(
+          { x: aim.x * 2.4, y: aim.y * 2.4, z: aim.z * 2.4 },
+          { uncertainty: 0 },
+        );
         return;
       } catch {}
     }
@@ -359,19 +436,36 @@ world.afterEvents.projectileHitEntity.subscribe((event) => {
 
 world.afterEvents.projectileHitBlock.subscribe((event) => {
   const state = activeThrows.get(event.projectile?.id);
+  impactEffect(event.projectile, state?.type ?? (event.projectile?.typeId === `${NS}:gungnir_bolt` ? "gungnir" : "other"));
   if (state) state.returning = true;
-  else projectileStats.delete(event.projectile?.id);
+  else {
+    try { if (valid(event.projectile)) event.projectile.remove(); } catch {}
+    energyShots.delete(event.projectile?.id);
+    projectileStats.delete(event.projectile?.id);
+  }
 });
 
 system.runInterval(() => {
   for (const [id, state] of activeThrows) {
     state.age++;
     if (!valid(state.projectile) || !valid(state.owner)) {
-      activeThrows.delete(id);
-      projectileStats.delete(id);
+      releaseThrow(state);
       continue;
     }
+    if (!state.returning) {
+      state.speed = Math.min(state.speed + 0.055, state.type === "shield" ? 2.45 : 2.2);
+      try {
+        state.projectile.getComponent("minecraft:projectile").shoot(
+          { x: state.direction.x * state.speed, y: 0, z: state.direction.z * state.speed },
+          { uncertainty: 0 },
+        );
+      } catch {}
+    }
     if (state.age > (state.type === "shield" ? 22 : 16)) state.returning = true;
+    if ((state.age & 1) === 0) {
+      const trail = state.type === "shield" ? "minecraft:critical_hit_emitter" : "minecraft:electric_spark_particle";
+      particle(state.projectile.dimension, trail, state.projectile.location);
+    }
     if (state.returning) {
       try {
         const target = state.owner.getHeadLocation();
@@ -379,13 +473,12 @@ system.runInterval(() => {
         const delta = subtract(target, pos);
         const dist = length(delta);
         if (dist < 1.6 || state.age > 100) {
-          state.projectile.remove();
-          activeThrows.delete(id);
-          projectileStats.delete(id);
+          releaseThrow(state, true);
           continue;
         }
         const dir = normalize(delta);
-        const step = Math.min(1.6 + state.loyalty * 0.35, dist);
+        const returnAge = Math.max(0, state.age - (state.type === "shield" ? 22 : 16));
+        const step = Math.min(0.75 + Math.min(returnAge * 0.085, 1.35) + state.loyalty * 0.25, dist);
         state.projectile.teleport(
           {
             x: pos.x + dir.x * step,
@@ -395,9 +488,20 @@ system.runInterval(() => {
           { facingLocation: target },
         );
       } catch {
-        activeThrows.delete(id);
+        releaseThrow(state);
       }
     }
+  }
+
+  for (const [id, shot] of energyShots) {
+    shot.age++;
+    if (!valid(shot.projectile) || shot.age > 70) {
+      try { if (valid(shot.projectile)) shot.projectile.remove(); } catch {}
+      energyShots.delete(id);
+      projectileStats.delete(id);
+      continue;
+    }
+    particle(shot.projectile.dimension, "minecraft:totem_particle", shot.projectile.location);
   }
 }, 1);
 
@@ -425,7 +529,8 @@ system.runInterval(() => {
           });
         }
       }
-      const shield = equipment?.getEquipment(EquipmentSlot.Offhand);
+      if (!equipment) continue;
+      const shield = equipment.getEquipment(EquipmentSlot.Offhand);
       if (shield?.typeId !== `${NS}:captain_shield`) continue;
       const durability = shield.getComponent("minecraft:durability");
       if (durability && durability.damage > 0) {
@@ -452,7 +557,11 @@ function nearestPlayer(entity, maxDistance = 48) {
 
 function bossPulse(boss) {
   const player = nearestPlayer(boss);
-  if (!player) return;
+  if (!player) {
+    try { boss.setProperty("chim_marvel:is_sitting", system.currentTick % 240 < 80); } catch {}
+    return;
+  }
+  try { boss.setProperty("chim_marvel:is_sitting", false); } catch {}
   const timer = bossTimers.get(boss.id) ?? { shot: 0, summon: 80 };
   timer.shot += 20;
   timer.summon += 20;
@@ -539,6 +648,25 @@ system.runInterval(() => {
     }
 }, 20);
 
+// Naturally generated arenas contain a black/obsidian central dais. Entering it
+// wakes the encounter without requiring commands or ticking-area entities.
+system.runInterval(() => {
+  for (const player of world.getAllPlayers()) {
+    try {
+      const below = player.dimension.getBlock({
+        x: Math.floor(player.location.x),
+        y: Math.floor(player.location.y) - 1,
+        z: Math.floor(player.location.z),
+      });
+      if (below?.typeId !== "minecraft:obsidian") continue;
+      const existing = player.dimension.getEntities({
+        type: `${NS}:hai_sieu_xau_quac`, location: player.location, maxDistance: 40,
+      });
+      if (!existing.length) spawnBossInArena(player.dimension, player.location);
+    } catch {}
+  }
+}, 100);
+
 function spawnBossInArena(dimension, center) {
   try {
     const { x, y, z } = center;
@@ -591,10 +719,10 @@ system.afterEvents.scriptEventReceive.subscribe((event) => {
   if (player?.typeId === "minecraft:player") {
     const loc = player.location;
     const x = Math.floor(loc.x);
-    const y = Math.floor(loc.y) - 2;
+    const groundY = Math.floor(loc.y) - 1;
     const z = Math.floor(loc.z);
-    // Load the arena structure as a fallback
-    try { player.dimension.runCommand(`structure load chim_marvel_arena/structure ${x} ${y} ${z}`); } catch {}
-    spawnBossInArena(player.dimension, { x, y: y + 1, z });
+    const origin = { x: x - 31, y: groundY - 10, z: z - 31 };
+    try { player.dimension.runCommand(`structure load chim_marvel_arena:structure ${origin.x} ${origin.y} ${origin.z}`); } catch {}
+    spawnBossInArena(player.dimension, { x, y: groundY + 2, z });
   }
 });

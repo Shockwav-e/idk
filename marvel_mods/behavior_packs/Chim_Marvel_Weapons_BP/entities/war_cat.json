@@ -1,5 +1,5 @@
 {
-  "format_version": "1.21.120",
+  "format_version": "1.26.0",
   "minecraft:entity": {
     "description": { "identifier": "chim_marvel:war_cat", "is_spawnable": false, "is_summonable": true },
     "components": {
@@ -16,15 +16,17 @@
       "minecraft:behavior.float": { "priority": 0 },
       "minecraft:behavior.hurt_by_target": { "priority": 1 },
       "minecraft:behavior.melee_attack": { "priority": 2, "speed_multiplier": 1.45, "track_target": true },
+      "minecraft:behavior.leap_at_target": { "priority": 3, "yd": 0.42, "must_be_on_ground": true },
       "minecraft:behavior.nearest_attackable_target": {
-        "priority": 3,
+        "priority": 4,
         "must_see": false,
         "within_radius": 32,
         "entity_types": [
           { "filters": { "test": "is_family", "subject": "other", "value": "player" }, "max_dist": 32 }
         ]
       },
-      "minecraft:behavior.random_stroll": { "priority": 6, "speed_multiplier": 1.0 },
+      "minecraft:behavior.random_stroll": { "priority": 7, "speed_multiplier": 1.0 },
+      "minecraft:behavior.random_look_around": { "priority": 8 },
       "minecraft:physics": {},
       "minecraft:pushable": { "is_pushable": true, "is_pushable_by_piston": true },
       "minecraft:timer": { "time": 90, "time_down_event": { "event": "chim_marvel:despawn" } }

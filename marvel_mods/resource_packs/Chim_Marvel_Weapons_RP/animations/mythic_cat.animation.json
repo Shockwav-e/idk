@@ -1,6 +1,15 @@
 {
   "format_version": "1.8.0",
   "animations": {
+    "animation.chim_marvel.cat_idle": {
+      "loop": true,
+      "animation_length": 2,
+      "bones": {
+        "body": { "position": [0, "math.sin(q.life_time * 180) * 0.18", 0] },
+        "head": { "rotation": ["math.sin(q.life_time * 90) * 2", "math.sin(q.life_time * 55) * 4", 0] },
+        "tail": { "rotation": [35, "math.sin(q.life_time * 65) * 16", 0] }
+      }
+    },
     "animation.chim_marvel.cat_walk": {
       "loop": true,
       "bones": {
@@ -9,6 +18,37 @@
         "front_right_leg": { "rotation": ["math.cos(q.modified_distance_moved * 180 + 180) * 30", 0, 0] },
         "back_left_leg": { "rotation": ["math.cos(q.modified_distance_moved * 180 + 180) * 30", 0, 0] },
         "tail": { "rotation": [35, "math.sin(q.life_time * 80) * 18", 0] }
+      }
+    },
+    "animation.chim_marvel.cat_sit": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "body": { "position": [0, -2.2, 2], "rotation": [-12, 0, 0] },
+        "head": { "position": [0, -0.4, -0.4], "rotation": [8, 0, 0] },
+        "front_left_leg": { "rotation": [-8, 0, 0] },
+        "front_right_leg": { "rotation": [-8, 0, 0] },
+        "back_left_leg": { "position": [0, -1, -2], "rotation": [-65, 0, 0] },
+        "back_right_leg": { "position": [0, -1, -2], "rotation": [-65, 0, 0] },
+        "tail": { "rotation": [70, 32, 0] }
+      }
+    },
+    "animation.chim_marvel.cat_attack": {
+      "loop": true,
+      "animation_length": 0.55,
+      "bones": {
+        "body": { "rotation": { "0.0": [-8, 0, 0], "0.25": [14, 0, 0], "0.55": [-8, 0, 0] } },
+        "head": { "rotation": { "0.0": [8, 0, 0], "0.25": [-22, 0, 0], "0.55": [8, 0, 0] } },
+        "front_left_leg": { "rotation": { "0.0": [-15, 0, 0], "0.25": [-72, 0, 0], "0.55": [-15, 0, 0] } },
+        "front_right_leg": { "rotation": { "0.0": [-15, 0, 0], "0.25": [-72, 0, 0], "0.55": [-15, 0, 0] } }
+      }
+    },
+    "animation.chim_marvel.cat_death": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 1.1,
+      "bones": {
+        "root": { "rotation": { "0.0": [0, 0, 0], "0.7": [0, 0, 88], "1.1": [0, 0, 88] }, "position": { "0.0": [0, 0, 0], "0.7": [0, -5, 0] } },
+        "tail": { "rotation": [10, 0, 0] }
       }
     }
   }

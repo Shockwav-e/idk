@@ -1,0 +1,14 @@
+{
+  "format_version": "1.26.30",
+  "minecraft:structure_template_feature": {
+    "description": { "identifier": "chim_marvel:marvel_arena_feature" },
+    "structure_name": "chim_marvel_arena:structure",
+    "adjustment_radius": 16,
+    "facing_direction": "random",
+    "ground_level": 10,
+    "constraints": {
+      "grounded": {},
+      "leveled": { "max_steepness": 5 }
+    }
+  }
+}

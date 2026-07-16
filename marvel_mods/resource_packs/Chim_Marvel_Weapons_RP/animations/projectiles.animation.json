@@ -6,6 +6,22 @@
       "animation_length": 0.5,
       "bones": { "weapon": { "rotation": [0, 0, "q.life_time * 720"] } }
     },
+    "animation.chim_marvel.stormbreaker_vertical": {
+      "loop": true,
+      "bones": { "weapon": { "rotation": ["q.life_time * 1080", 0, 0] } }
+    },
+    "animation.chim_marvel.stormbreaker_horizontal": {
+      "loop": true,
+      "bones": { "weapon": { "rotation": [0, "q.life_time * 1080", 0] } }
+    },
+    "animation.chim_marvel.stormbreaker_diagonal": {
+      "loop": true,
+      "bones": { "weapon": { "rotation": ["q.life_time * 760", "q.life_time * 760", "q.life_time * 380"] } }
+    },
+    "animation.chim_marvel.stormbreaker_mixed": {
+      "loop": true,
+      "bones": { "weapon": { "rotation": ["q.life_time * 900 * math.max(0, 1 - q.life_time * 0.7)", "q.life_time * 900 * math.min(1, q.life_time * 0.7)", 0] } }
+    },
     "animation.chim_marvel.pulse": {
       "loop": true,
       "animation_length": 1,
@@ -23,47 +39,47 @@
       "loop": true,
       "animation_length": 0.05,
       "bones": {
-        "weapon": { "position": [2, 11, -5], "rotation": [15, -90, 0] }
+        "weapon": { "position": [0, 0, 0], "rotation": [85, -8, 0] }
       }
     },
     "animation.chim_marvel.mjolnir_third_person": {
       "loop": true,
       "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [180, 0, 0] } }
+      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [105, 0, 0] } }
     },
     "animation.chim_marvel.stormbreaker_first_person": {
       "loop": true,
       "animation_length": 0.05,
       "bones": {
-        "weapon": { "position": [2.5, 12, -5.5], "rotation": [10, -85, 0] }
+        "weapon": { "position": [0, 0, 0], "rotation": [82, -10, 0] }
       }
     },
     "animation.chim_marvel.stormbreaker_third_person": {
       "loop": true,
       "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [180, 0, 0] } }
+      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [102, 0, 0] } }
     },
     "animation.chim_marvel.gungnir_first_person": {
       "loop": true,
       "animation_length": 0.05,
       "bones": {
-        "weapon": { "position": [2, 10, -5], "rotation": [15, -90, 0] }
+        "weapon": { "position": [0, 0, 0], "rotation": [88, -6, 0] }
       }
     },
     "animation.chim_marvel.gungnir_third_person": {
       "loop": true,
       "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [180, 0, 0] } }
+      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [104, 0, 0] } }
     },
     "animation.chim_marvel.shield_first_person": {
       "loop": true,
       "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 8, -4], "rotation": [0, -90, 0] } }
+      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [0, -90, 0] } }
     },
     "animation.chim_marvel.shield_third_person": {
       "loop": true,
       "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [0, 0, 0] } }
+      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [0, 0, -12] } }
     },
     "animation.chim_marvel.mjolnir_projectile_fly": {
       "loop": true,
