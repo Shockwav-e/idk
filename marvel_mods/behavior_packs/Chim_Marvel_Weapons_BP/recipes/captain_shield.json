@@ -1,0 +1,14 @@
+{
+  "format_version": "1.21.120",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "chim_marvel:captain_shield" },
+    "unlock": [{ "item": "chim_marvel:vibranium" }],
+    "tags": ["crafting_table"],
+    "pattern": ["VVV", "VRV", "VVV"],
+    "key": {
+      "V": { "item": "chim_marvel:vibranium" },
+      "R": { "item": "minecraft:red_dye" }
+    },
+    "result": { "item": "chim_marvel:captain_shield", "count": 1 }
+  }
+}

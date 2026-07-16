@@ -1,0 +1,10 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": { "description": {
+    "identifier": "chim_marvel:hai_sieu_xau_quac", "materials": { "default": "entity_alphatest" },
+    "spawn_egg": { "base_color": "#F4EEE3", "overlay_color": "#17151B" },
+    "textures": { "default": "textures/entity/hai_sieu_xau_quac" }, "geometry": { "default": "geometry.chim_marvel.hai_sieu_xau_quac" },
+    "animations": { "walk": "animation.chim_marvel.cat_walk" }, "scripts": { "animate": ["walk"] },
+    "render_controllers": ["controller.render.default"]
+  } }
+}

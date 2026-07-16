@@ -1,0 +1,18 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Chim Marvel Weapons RP",
+    "description": "Original models and textures for Chim Marvel Weapons",
+    "uuid": "28fb558f-0121-4dca-9be5-4ba7d0a8f4db",
+    "pack_scope": "world",
+    "version": [1, 0, 7],
+    "min_engine_version": [1, 21, 120]
+  },
+  "modules": [
+    { "type": "resources", "uuid": "85aecd12-9c69-43b8-80d0-91eff0cced57", "version": [1, 0, 7] }
+  ],
+  "dependencies": [
+    { "uuid": "becb9b16-de16-4320-9c7e-b468e5a1ebfa", "version": [1, 0, 7] }
+  ],
+  "metadata": { "product_type": "addon", "authors": ["Uday", "Codex"], "license": "Private server use" }
+}

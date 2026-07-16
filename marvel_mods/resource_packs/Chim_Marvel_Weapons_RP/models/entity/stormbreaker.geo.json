@@ -1,0 +1,15 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [{
+    "description": { "identifier": "geometry.chim_marvel.stormbreaker", "texture_width": 64, "texture_height": 64, "visible_bounds_width": 4, "visible_bounds_height": 4, "visible_bounds_offset": [0, 1, 0] },
+    "bones": [{
+      "name": "weapon", "pivot": [0, 0, 0], "binding": "q.item_slot_to_bone_name(c.item_slot)",
+      "cubes": [
+        { "origin": [-1.25, -8, -1.25], "size": [2.5, 24, 2.5], "uv": [0, 0] },
+        { "origin": [-4, 13, -2.5], "size": [8, 6, 5], "uv": [12, 0] },
+        { "origin": [4, 11, -2], "size": [6, 10, 4], "pivot": [4, 16, 0], "rotation": [0, 0, -18], "uv": [12, 14] },
+        { "origin": [-8, 14, -2], "size": [4, 4, 4], "uv": [36, 0] }
+      ]
+    }]
+  }]
+}

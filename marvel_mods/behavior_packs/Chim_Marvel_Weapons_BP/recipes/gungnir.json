@@ -1,0 +1,14 @@
+{
+  "format_version": "1.21.120",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "chim_marvel:gungnir" },
+    "unlock": [{ "item": "chim_marvel:uru_metal" }],
+    "tags": ["crafting_table"],
+    "pattern": ["U", "U", "B"],
+    "key": {
+      "U": { "item": "chim_marvel:uru_metal" },
+      "B": { "item": "minecraft:blaze_rod" }
+    },
+    "result": { "item": "chim_marvel:gungnir", "count": 1 }
+  }
+}

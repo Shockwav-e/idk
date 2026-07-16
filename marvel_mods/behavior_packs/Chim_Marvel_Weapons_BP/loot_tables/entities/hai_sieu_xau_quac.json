@@ -1,0 +1,12 @@
+{
+  "pools": [
+    { "rolls": 1, "entries": [
+      { "type": "item", "name": "chim_marvel:stormbreaker", "weight": 1 },
+      { "type": "item", "name": "chim_marvel:mjolnir", "weight": 1 },
+      { "type": "item", "name": "chim_marvel:captain_shield", "weight": 1 },
+      { "type": "item", "name": "chim_marvel:gungnir", "weight": 1 }
+    ] },
+    { "rolls": { "min": 6, "max": 12 }, "entries": [ { "type": "item", "name": "minecraft:diamond", "weight": 1 } ] },
+    { "rolls": 1, "entries": [ { "type": "item", "name": "minecraft:nether_star", "weight": 1 } ] }
+  ]
+}

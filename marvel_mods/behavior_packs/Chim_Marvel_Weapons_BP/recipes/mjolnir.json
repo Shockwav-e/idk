@@ -1,0 +1,14 @@
+{
+  "format_version": "1.21.120",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "chim_marvel:mjolnir" },
+    "unlock": [{ "item": "chim_marvel:uru_metal" }],
+    "tags": ["crafting_table"],
+    "pattern": ["U", "S"],
+    "key": {
+      "U": { "item": "chim_marvel:uru_metal" },
+      "S": { "item": "minecraft:stick" }
+    },
+    "result": { "item": "chim_marvel:mjolnir", "count": 1 }
+  }
+}

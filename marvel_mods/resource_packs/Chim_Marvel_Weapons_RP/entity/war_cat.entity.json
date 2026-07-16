@@ -1,0 +1,9 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": { "description": {
+    "identifier": "chim_marvel:war_cat", "materials": { "default": "entity_alphatest" },
+    "textures": { "default": "textures/entity/war_cat" }, "geometry": { "default": "geometry.chim_marvel.mythic_cat" },
+    "animations": { "walk": "animation.chim_marvel.cat_walk" }, "scripts": { "animate": ["walk"] },
+    "render_controllers": ["controller.render.default"]
+  } }
+}

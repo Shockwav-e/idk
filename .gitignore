@@ -1,0 +1,6 @@
+# Keep this repo focused on our custom Marvel Bedrock add-on.
+*
+
+!.gitignore
+!marvel_mods/
+!marvel_mods/**

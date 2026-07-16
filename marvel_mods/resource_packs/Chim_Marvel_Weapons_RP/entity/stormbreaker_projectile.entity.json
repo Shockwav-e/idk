@@ -1,0 +1,9 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": { "description": {
+    "identifier": "chim_marvel:stormbreaker_projectile", "materials": { "default": "entity_alphatest" },
+    "textures": { "default": "textures/entity/stormbreaker" }, "geometry": { "default": "geometry.chim_marvel.axe_projectile" },
+    "animations": { "spin": "animation.chim_marvel.spin" }, "scripts": { "animate": ["spin"] },
+    "render_controllers": ["controller.render.default"]
+  } }
+}

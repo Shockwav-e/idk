@@ -1,0 +1,16 @@
+pack.name=Chim Marvel Weapons
+pack.description=Mythic weapons and the Hai Sieu Xau Quac boss
+item.chim_marvel:mjolnir.name=§bMjolnir
+item.chim_marvel:mjolnir=§bMjolnir
+item.chim_marvel:stormbreaker.name=§3Stormbreaker
+item.chim_marvel:stormbreaker=§3Stormbreaker
+item.chim_marvel:captain_shield.name=§9Captain's Shield
+item.chim_marvel:captain_shield=§9Captain's Shield
+item.chim_marvel:gungnir.name=§6Gungnir
+item.chim_marvel:gungnir=§6Gungnir
+item.chim_marvel:vibranium.name=§bVibranium
+item.chim_marvel:vibranium=§bVibranium
+item.chim_marvel:uru_metal.name=§5Uru Metal
+item.chim_marvel:uru_metal=§5Uru Metal
+entity.chim_marvel:hai_sieu_xau_quac.name=Hai Sieu Xau Quac
+entity.chim_marvel:war_cat.name=War Cat

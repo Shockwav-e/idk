@@ -1,0 +1,35 @@
+{
+  "format_version": "1.21.120",
+  "minecraft:entity": {
+    "description": { "identifier": "chim_marvel:war_cat", "is_spawnable": false, "is_summonable": true },
+    "components": {
+      "minecraft:type_family": { "family": ["chim_cat", "monster", "mob"] },
+      "minecraft:health": { "value": 40, "max": 40 },
+      "minecraft:attack": { "damage": 10 },
+      "minecraft:movement": { "value": 0.42 },
+      "minecraft:movement.basic": {},
+      "minecraft:navigation.walk": { "can_path_over_water": true, "avoid_damage_blocks": true },
+      "minecraft:follow_range": { "value": 32, "max": 32 },
+      "minecraft:knockback_resistance": { "value": 0.25 },
+      "minecraft:collision_box": { "width": 0.6, "height": 0.7 },
+      "minecraft:scale": { "value": 1.15 },
+      "minecraft:behavior.float": { "priority": 0 },
+      "minecraft:behavior.hurt_by_target": { "priority": 1 },
+      "minecraft:behavior.melee_attack": { "priority": 2, "speed_multiplier": 1.45, "track_target": true },
+      "minecraft:behavior.nearest_attackable_target": {
+        "priority": 3,
+        "must_see": false,
+        "within_radius": 32,
+        "entity_types": [
+          { "filters": { "test": "is_family", "subject": "other", "value": "player" }, "max_dist": 32 }
+        ]
+      },
+      "minecraft:behavior.random_stroll": { "priority": 6, "speed_multiplier": 1.0 },
+      "minecraft:physics": {},
+      "minecraft:pushable": { "is_pushable": true, "is_pushable_by_piston": true },
+      "minecraft:timer": { "time": 90, "time_down_event": { "event": "chim_marvel:despawn" } }
+    },
+    "events": { "chim_marvel:despawn": { "add": { "component_groups": ["chim_marvel:instant_despawn"] } } },
+    "component_groups": { "chim_marvel:instant_despawn": { "minecraft:instant_despawn": {} } }
+  }
+}
