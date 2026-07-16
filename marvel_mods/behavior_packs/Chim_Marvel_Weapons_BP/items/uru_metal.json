@@ -3,7 +3,7 @@
   "minecraft:item": {
     "description": { "identifier": "chim_marvel:uru_metal", "menu_category": { "category": "items" } },
     "components": {
-      "minecraft:icon": { "texture": "chim_marvel:uru_metal" },
+      "minecraft:icon": { "texture": "uru_metal" },
       "minecraft:display_name": { "value": "§5Uru Metal" },
       "minecraft:hover_text_color": "light_purple",
       "minecraft:max_stack_size": 64,

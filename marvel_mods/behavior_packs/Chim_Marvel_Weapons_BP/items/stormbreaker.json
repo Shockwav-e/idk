@@ -3,7 +3,7 @@
   "minecraft:item": {
     "description": { "identifier": "chim_marvel:stormbreaker", "menu_category": { "category": "equipment", "group": "itemGroup.name.sword" } },
     "components": {
-      "minecraft:icon": { "texture": "chim_marvel:stormbreaker" },
+      "minecraft:icon": { "texture": "stormbreaker" },
       "minecraft:display_name": { "value": "§3Stormbreaker" },
       "minecraft:hover_text_color": "aqua",
       "minecraft:rarity": "epic",

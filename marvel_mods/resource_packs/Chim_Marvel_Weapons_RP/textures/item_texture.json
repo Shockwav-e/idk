@@ -2,17 +2,11 @@
   "resource_pack_name": "chim_marvel_weapons",
   "texture_name": "atlas.items",
   "texture_data": {
-    "chim_marvel:mjolnir": { "textures": "textures/items/mjolnir" },
-    "chim_marvel:stormbreaker": { "textures": "textures/items/stormbreaker" },
-    "chim_marvel:captain_shield": { "textures": "textures/items/captain_shield" },
-    "chim_marvel:gungnir": { "textures": "textures/items/gungnir" },
-    "chim_marvel:vibranium": { "textures": "textures/items/vibranium" },
-    "chim_marvel:uru_metal": { "textures": "textures/items/uru_metal" },
-    "chim_marvel_mjolnir": { "textures": "textures/items/mjolnir" },
-    "chim_marvel_stormbreaker": { "textures": "textures/items/stormbreaker" },
-    "chim_marvel_captain_shield": { "textures": "textures/items/captain_shield" },
-    "chim_marvel_gungnir": { "textures": "textures/items/gungnir" },
-    "chim_marvel_vibranium": { "textures": "textures/items/vibranium" },
-    "chim_marvel_uru_metal": { "textures": "textures/items/uru_metal" }
+    "mjolnir": { "textures": "textures/items/mjolnir" },
+    "stormbreaker": { "textures": "textures/items/stormbreaker" },
+    "captain_shield": { "textures": "textures/items/captain_shield" },
+    "gungnir": { "textures": "textures/items/gungnir" },
+    "vibranium": { "textures": "textures/items/vibranium" },
+    "uru_metal": { "textures": "textures/items/uru_metal" }
   }
 }

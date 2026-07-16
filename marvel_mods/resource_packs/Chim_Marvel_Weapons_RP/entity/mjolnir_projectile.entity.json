@@ -1,9 +1,14 @@
 {
   "format_version": "1.10.0",
-  "minecraft:client_entity": { "description": {
-    "identifier": "chim_marvel:mjolnir_projectile", "materials": { "default": "entity_alphatest" },
-    "textures": { "default": "textures/entity/mjolnir" }, "geometry": { "default": "geometry.chim_marvel.hammer_projectile" },
-    "animations": { "spin": "animation.chim_marvel.spin" }, "scripts": { "animate": ["spin"] },
-    "render_controllers": ["controller.render.default"]
-  } }
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "chim_marvel:mjolnir_projectile",
+      "materials": { "default": "entity_alphatest" },
+      "textures": { "default": "textures/entity/mjolnir" },
+      "geometry": { "default": "geometry.chim_marvel.hammer_projectile" },
+      "animations": { "fly": "animation.chim_marvel.mjolnir_projectile_fly" },
+      "scripts": { "animate": ["fly"] },
+      "render_controllers": ["controller.render.default"]
+    }
+  }
 }

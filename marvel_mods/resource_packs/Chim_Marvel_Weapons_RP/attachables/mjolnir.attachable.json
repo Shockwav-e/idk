@@ -1,10 +1,29 @@
 {
   "format_version": "1.10.0",
-  "minecraft:attachable": { "description": {
-    "identifier": "chim_marvel:mjolnir",
-    "materials": { "default": "entity_alphatest", "enchanted": "entity_alphatest_glint" },
-    "textures": { "default": "textures/entity/mjolnir", "enchanted": "textures/misc/enchanted_item_glint" },
-    "geometry": { "default": "geometry.chim_marvel.mjolnir" },
-    "render_controllers": ["controller.render.item_default"]
-  } }
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "chim_marvel:mjolnir",
+      "materials": {
+        "default": "entity_alphatest",
+        "enchanted": "entity_alphatest_glint"
+      },
+      "textures": {
+        "default": "textures/entity/mjolnir",
+        "enchanted": "textures/misc/enchanted_item_glint"
+      },
+      "geometry": { "default": "geometry.chim_marvel.mjolnir" },
+      "animations": {
+        "first_person": "animation.chim_marvel.mjolnir_first_person",
+        "third_person": "animation.chim_marvel.mjolnir_third_person"
+      },
+      "scripts": {
+        "parent_setup": "variable.hat_layer_visible = 0.0;",
+        "animate": [
+          { "first_person": "c.is_first_person" },
+          { "third_person": "!c.is_first_person" }
+        ]
+      },
+      "render_controllers": ["controller.render.item_default"]
+    }
+  }
 }

@@ -185,6 +185,8 @@ function useWeapon(event) {
     launch(player, "shield", event.itemStack);
   } else if (id === `${NS}:gungnir`) {
     if (!tryWeaponCooldown(player, "gungnir_bolt")) return;
+    // Clear any lingering thunder weather before Gungnir fires
+    try { world.getDimension("overworld").runCommand("weather clear"); } catch {}
     launch(player, "gungnir", event.itemStack);
   }
 }

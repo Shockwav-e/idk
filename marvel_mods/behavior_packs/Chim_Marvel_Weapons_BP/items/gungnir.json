@@ -3,7 +3,7 @@
   "minecraft:item": {
     "description": { "identifier": "chim_marvel:gungnir", "menu_category": { "category": "equipment", "group": "itemGroup.name.sword" } },
     "components": {
-      "minecraft:icon": { "texture": "chim_marvel:gungnir" },
+      "minecraft:icon": { "texture": "gungnir" },
       "minecraft:display_name": { "value": "§6Gungnir" },
       "minecraft:hover_text_color": "gold",
       "minecraft:rarity": "epic",

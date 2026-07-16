@@ -3,7 +3,7 @@
   "minecraft:item": {
     "description": { "identifier": "chim_marvel:captain_shield", "menu_category": { "category": "equipment", "group": "itemGroup.name.shield" } },
     "components": {
-      "minecraft:icon": { "texture": "chim_marvel:captain_shield" },
+      "minecraft:icon": { "texture": "captain_shield" },
       "minecraft:display_name": { "value": "§9Captain's Shield" },
       "minecraft:hover_text_color": "blue",
       "minecraft:rarity": "epic",

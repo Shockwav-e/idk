@@ -3,7 +3,7 @@
   "minecraft:item": {
     "description": { "identifier": "chim_marvel:mjolnir", "menu_category": { "category": "equipment", "group": "itemGroup.name.sword" } },
     "components": {
-      "minecraft:icon": { "texture": "chim_marvel:mjolnir" },
+      "minecraft:icon": { "texture": "mjolnir" },
       "minecraft:display_name": { "value": "§bMjolnir" },
       "minecraft:hover_text_color": "aqua",
       "minecraft:rarity": "epic",
