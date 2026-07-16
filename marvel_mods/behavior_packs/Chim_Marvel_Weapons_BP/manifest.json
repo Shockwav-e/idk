@@ -8,8 +8,23 @@
     "min_engine_version": [1, 21, 120]
   },
   "modules": [
-    { "type": "data", "uuid": "6b336cf9-3f9b-406d-ad97-4f5f81f30cb7", "version": [1, 0, 7] },
-    { "type": "script", "language": "javascript", "entry": "scripts/main.js", "uuid": "39ae93f2-fc61-4cba-8d88-ac8ebbca2805", "version": [1, 0, 7] }
+    {
+      "type": "data",
+      "uuid": "6b336cf9-3f9b-406d-ad97-4f5f81f30cb7",
+      "version": [1, 0, 7]
+    },
+    {
+      "type": "script",
+      "language": "javascript",
+      "entry": "scripts/main.js",
+      "uuid": "39ae93f2-fc61-4cba-8d88-ac8ebbca2805",
+      "version": [1, 0, 7]
+    },
+    {
+      "type": "worldgen",
+      "uuid": "a7b8c9d0-e1f2-3456-7890-abcdef123456",
+      "version": [1, 0, 7]
+    }
   ],
   "dependencies": [
     { "uuid": "28fb558f-0121-4dca-9be5-4ba7d0a8f4db", "version": [1, 0, 7] },

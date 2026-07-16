@@ -1,0 +1,18 @@
+{
+  "format_version": "1.21.20",
+  "minecraft:template_pool": {
+    "description": {
+      "identifier": "chim_marvel:arena"
+    },
+    "elements": [
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "chim_marvel_arena/structure",
+          "processors": "minecraft:empty"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}
