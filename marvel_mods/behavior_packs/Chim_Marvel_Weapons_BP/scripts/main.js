@@ -539,64 +539,6 @@ system.runInterval(() => {
     }
 }, 20);
 
-// Track arenas that already have a boss spawned (by chunk coords)
-const spawnedArenas = new Set();
-const ARENA_SCAN_INTERVAL = 100; // every 5 seconds
-
-function scanForArenas(dimension) {
-  try {
-    // Scan underground (y = -60 region) for nether_brick clusters
-    // The arena is ~15x15 nether_bricks at y=-60 underground
-    for (const player of world.getAllPlayers()) {
-      if (player.dimension.id !== dimension.id) continue;
-      const px = Math.floor(player.location.x);
-      const pz = Math.floor(player.location.z);
-      
-      // Only scan chunks near players that are above ground
-      // We look in 48-block radius around the player
-      for (let ox = -2; ox <= 2; ox++) {
-        for (let oz = -2; oz <= 2; oz++) {
-          const cx = (px >> 4) + ox;
-          const cz = (pz >> 4) + oz;
-          const key = `${dimension.id}:${cx}:${cz}`;
-          if (spawnedArenas.has(key)) continue;
-          
-          // Check if this chunk has an arena at y=-60
-          const baseX = cx * 16;
-          const baseZ = cz * 16;
-          let found = false;
-          let arenaCenterX = 0, arenaCenterZ = 0, arenaCount = 0;
-          
-          for (let tx = baseX; tx < baseX + 16 && !found; tx += 2) {
-            for (let tz = baseZ; tz < baseZ + 16 && !found; tz += 2) {
-              try {
-                const block = dimension.getBlock({ x: tx, y: -60, z: tz });
-                if (block?.typeId === "minecraft:nether_bricks") {
-                  arenaCenterX += tx;
-                  arenaCenterZ += tz;
-                  arenaCount++;
-                  if (arenaCount > 15) {
-                    // Found dense nether_brick cluster = arena
-                    found = true;
-                    arenaCenterX = Math.floor(arenaCenterX / arenaCount);
-                    arenaCenterZ = Math.floor(arenaCenterZ / arenaCount);
-                  }
-                }
-              } catch {}
-            }
-          }
-          
-          if (found) {
-            const center = { x: arenaCenterX, y: -59, z: arenaCenterZ };
-            spawnBossInArena(dimension, center);
-            spawnedArenas.add(key);
-          }
-        }
-      }
-    }
-  } catch {}
-}
-
 function spawnBossInArena(dimension, center) {
   try {
     const { x, y, z } = center;
@@ -630,11 +572,6 @@ function spawnBossInArena(dimension, center) {
     console.warn(`Failed to spawn boss in arena: ${error}`);
   }
 }
-
-// Scan for naturally-generated arenas periodically
-system.runInterval(() => {
-  scanForArenas(world.getDimension("overworld"));
-}, ARENA_SCAN_INTERVAL);
 
 world.afterEvents.playerSpawn.subscribe((event) => {
   if (!event.initialSpawn) return;
