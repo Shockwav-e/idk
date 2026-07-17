@@ -100,7 +100,13 @@ function particle(dimension, id, location) {
 }
 
 function impactEffect(projectile, type) {
-  const { dimension, location } = projectile;
+  let dimension, location;
+  try {
+    dimension = projectile.dimension;
+    location = projectile.location;
+  } catch {
+    return; // entity already removed before impact effect could run
+  }
   if (type === "gungnir") {
     particle(dimension, "minecraft:totem_particle", location);
     particle(dimension, "minecraft:critical_hit_emitter", location);

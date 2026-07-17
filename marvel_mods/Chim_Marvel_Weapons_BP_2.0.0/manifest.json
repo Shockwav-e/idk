@@ -5,7 +5,7 @@
     "description": "Original mythic weapons and the Hai Sieu Xau Quac boss encounter",
     "uuid": "becb9b16-de16-4320-9c7e-b468e5a1ebfa",
     "version": [2, 0, 0],
-    "min_engine_version": [1, 26, 0]
+    "min_engine_version": [1, 21, 0]
   },
   "modules": [
     {

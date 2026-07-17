@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.0",
+  "format_version": "1.21.40",
   "minecraft:entity": {
     "description": { "identifier": "chim_marvel:mjolnir_projectile", "is_spawnable": false, "is_summonable": true },
     "components": {

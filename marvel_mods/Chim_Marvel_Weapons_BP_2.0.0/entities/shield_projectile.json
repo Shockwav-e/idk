@@ -1,17 +1,10 @@
 {
-  "format_version": "1.26.0",
+  "format_version": "1.21.40",
   "minecraft:entity": {
-    "description": {
-      "identifier": "chim_marvel:stormbreaker_projectile",
-      "is_spawnable": false,
-      "is_summonable": true,
-      "properties": {
-        "chim_marvel:spin_style": { "type": "int", "range": [0, 3], "default": 0, "client_sync": true }
-      }
-    },
+    "description": { "identifier": "chim_marvel:shield_projectile", "is_spawnable": false, "is_summonable": true },
     "components": {
-      "minecraft:collision_box": { "width": 0.5, "height": 0.5 },
-      "minecraft:projectile": { "gravity": 0.008, "power": 3.2, "knockback": true, "multiple_targets": false },
+      "minecraft:collision_box": { "width": 0.7, "height": 0.7 },
+      "minecraft:projectile": { "gravity": 0, "power": 2.8, "knockback": true, "multiple_targets": false },
       "minecraft:physics": { "has_gravity": false },
       "minecraft:pushable": { "is_pushable": false, "is_pushable_by_piston": false },
       "minecraft:timer": { "time": 8, "time_down_event": { "event": "chim_marvel:despawn" } }
