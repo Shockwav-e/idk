@@ -3,24 +3,61 @@
   "animations": {
     "animation.chim_marvel.spin": {
       "loop": true,
-      "animation_length": 0.5,
-      "bones": { "weapon": { "rotation": [0, 0, "q.life_time * 720"] } }
+      "animation_length": 1,
+      "bones": {
+        "weapon": {
+          "rotation": [
+            "math.sin(q.life_time * 360 * 3) * 8",
+            0,
+            "q.life_time * 540"
+          ]
+        }
+      }
     },
     "animation.chim_marvel.stormbreaker_vertical": {
       "loop": true,
-      "bones": { "weapon": { "rotation": ["q.life_time * 1080", 0, 0] } }
+      "animation_length": 0.5,
+      "bones": {
+        "weapon": {
+          "rotation": ["q.life_time * 720", 0, 0],
+          "scale": [1, "1 + math.sin(q.life_time * 720) * 0.04", 1]
+        }
+      }
     },
     "animation.chim_marvel.stormbreaker_horizontal": {
       "loop": true,
-      "bones": { "weapon": { "rotation": [0, "q.life_time * 1080", 0] } }
+      "animation_length": 0.5,
+      "bones": {
+        "weapon": {
+          "rotation": [0, "q.life_time * 720", 0]
+        }
+      }
     },
     "animation.chim_marvel.stormbreaker_diagonal": {
       "loop": true,
-      "bones": { "weapon": { "rotation": ["q.life_time * 760", "q.life_time * 760", "q.life_time * 380"] } }
+      "animation_length": 1,
+      "bones": {
+        "weapon": {
+          "rotation": [
+            "q.life_time * 600",
+            "q.life_time * 300",
+            "q.life_time * 600"
+          ]
+        }
+      }
     },
     "animation.chim_marvel.stormbreaker_mixed": {
       "loop": true,
-      "bones": { "weapon": { "rotation": ["q.life_time * 900 * math.max(0, 1 - q.life_time * 0.7)", "q.life_time * 900 * math.min(1, q.life_time * 0.7)", 0] } }
+      "animation_length": 3,
+      "bones": {
+        "weapon": {
+          "rotation": [
+            "math.cos(math.mod(q.life_time, 3) / 3 * 180) * q.life_time * 480",
+            "math.sin(math.mod(q.life_time, 3) / 3 * 180) * q.life_time * 480",
+            "math.sin(math.mod(q.life_time, 3) / 3 * 360) * 15"
+          ]
+        }
+      }
     },
     "animation.chim_marvel.pulse": {
       "loop": true,
@@ -28,63 +65,121 @@
       "bones": {
         "weapon": {
           "scale": [
-            "1 + math.sin(q.life_time * 360) * 0.15",
-            "1 + math.sin(q.life_time * 360) * 0.15",
-            "1 + math.sin(q.life_time * 360) * 0.15"
+            "1 + math.sin(q.life_time * 360) * 0.2 + math.sin(q.life_time * 360 * 3) * 0.05",
+            "1 + math.sin(q.life_time * 360) * 0.2 + math.sin(q.life_time * 360 * 3) * 0.05",
+            "1 + math.sin(q.life_time * 360) * 0.2 + math.sin(q.life_time * 360 * 3) * 0.05"
           ]
         }
       }
     },
     "animation.chim_marvel.mjolnir_first_person": {
       "loop": true,
-      "animation_length": 0.05,
+      "animation_length": 2,
       "bones": {
-        "weapon": { "position": [0, 0, 0], "rotation": [85, -8, 0] }
+        "weapon": {
+          "position": [
+            "math.sin(q.life_time * 180) * 0.15",
+            "math.sin(q.life_time * 120) * 0.1",
+            0
+          ],
+          "rotation": [90, -5, 0]
+        }
       }
     },
     "animation.chim_marvel.mjolnir_third_person": {
       "loop": true,
-      "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [105, 0, 0] } }
+      "animation_length": 2,
+      "bones": {
+        "weapon": {
+          "position": [0, 0, 0],
+          "rotation": ["100 + math.sin(q.life_time * 90) * 1.5", 0, 0]
+        }
+      }
     },
     "animation.chim_marvel.stormbreaker_first_person": {
       "loop": true,
-      "animation_length": 0.05,
+      "animation_length": 2,
       "bones": {
-        "weapon": { "position": [0, 0, 0], "rotation": [82, -10, 0] }
+        "weapon": {
+          "position": [
+            "math.sin(q.life_time * 140) * 0.2",
+            "math.sin(q.life_time * 100) * 0.15",
+            0
+          ],
+          "rotation": [85, -8, "math.sin(q.life_time * 70) * 2"]
+        }
       }
     },
     "animation.chim_marvel.stormbreaker_third_person": {
       "loop": true,
-      "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [102, 0, 0] } }
+      "animation_length": 2,
+      "bones": {
+        "weapon": {
+          "position": [0, 0, 0],
+          "rotation": ["98 + math.sin(q.life_time * 80) * 2", 0, 0]
+        }
+      }
     },
     "animation.chim_marvel.gungnir_first_person": {
       "loop": true,
-      "animation_length": 0.05,
+      "animation_length": 3,
       "bones": {
-        "weapon": { "position": [0, 0, 0], "rotation": [88, -6, 0] }
+        "weapon": {
+          "position": [
+            "math.sin(q.life_time * 120) * 0.08",
+            "math.sin(q.life_time * 80) * 0.05",
+            0
+          ],
+          "rotation": [90, -3, 0]
+        }
       }
     },
     "animation.chim_marvel.gungnir_third_person": {
       "loop": true,
-      "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [104, 0, 0] } }
+      "animation_length": 3,
+      "bones": {
+        "weapon": {
+          "position": [0, 0, 0],
+          "rotation": ["95 + math.sin(q.life_time * 60) * 1", 0, 0]
+        }
+      }
     },
     "animation.chim_marvel.shield_first_person": {
       "loop": true,
-      "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [0, -90, 0] } }
+      "animation_length": 2,
+      "bones": {
+        "weapon": {
+          "position": [
+            "math.sin(q.life_time * 100) * 0.1",
+            "math.sin(q.life_time * 80) * 0.08",
+            0
+          ],
+          "rotation": [15, -85, 5]
+        }
+      }
     },
     "animation.chim_marvel.shield_third_person": {
       "loop": true,
-      "animation_length": 0.05,
-      "bones": { "weapon": { "position": [0, 0, 0], "rotation": [0, 0, -12] } }
+      "animation_length": 2,
+      "bones": {
+        "weapon": {
+          "position": [0, 0, 0],
+          "rotation": [10, -90, "math.sin(q.life_time * 60) * 2 - 8"]
+        }
+      }
     },
     "animation.chim_marvel.mjolnir_projectile_fly": {
       "loop": true,
-      "animation_length": 0.05,
-      "bones": { "weapon": { "rotation": [0, 0, 0] } }
+      "animation_length": 0.5,
+      "bones": {
+        "weapon": {
+          "rotation": [
+            "math.sin(q.life_time * 360 * 5) * 5",
+            0,
+            "q.life_time * 900"
+          ]
+        }
+      }
     }
   }
 }
