@@ -15,7 +15,7 @@
       "animation_length": 0.5,
       "bones": {
         "weapon": {
-          "rotation": ["90 + q.life_time * 1080", 0, 0]
+          "rotation": [0, 90, 0]
         }
       }
     },
@@ -34,47 +34,60 @@
     },
     "animation.chim_marvel.mjolnir_first_person": {
       "loop": true,
-      "animation_length": 2,
       "bones": {
         "weapon": {
-          "position": [
-            "1.5 + math.sin(q.life_time * 180) * 0.12",
-            "-3.0 + math.sin(q.life_time * 120) * 0.08",
-            3.5
-          ],
-          "rotation": [90, -5, 0]
+          "rotation": [81, 60, -60],
+          "position": [3, 30, 9],
+          "scale": 1.05
         }
       }
     },
     "animation.chim_marvel.mjolnir_third_person": {
       "loop": true,
-      "animation_length": 2,
       "bones": {
         "weapon": {
-          "rotation": [0, 0, 0]
+          "rotation": [90, 2.5, 0],
+          "position": [0.5, 22.5, 2.5],
+          "scale": 0.85
+        }
+      }
+    },
+    "animation.chim_marvel.mjolnir_use": {
+      "animation_length": 0.9167,
+      "bones": {
+        "weapon": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.1667": [52.94218, -3.80493, -25.14918],
+            "0.5417": [52.94218, -3.80493, -25.14918],
+            "0.9167": [0, 0, 0]
+          },
+          "position": {
+            "0.0": { "post": [0, 0, 0], "lerp_mode": "catmullrom" },
+            "0.0833": { "post": [3.5, -10, -0.5], "lerp_mode": "catmullrom" },
+            "0.1667": { "post": [9, -12, 2], "lerp_mode": "catmullrom" },
+            "0.25": { "post": [9, -12, 2], "lerp_mode": "catmullrom" },
+            "0.9167": [0, 0, 0]
+          }
         }
       }
     },
     "animation.chim_marvel.stormbreaker_first_person": {
       "loop": true,
-      "animation_length": 2,
       "bones": {
         "weapon": {
-          "position": [
-            "1.5 + math.sin(q.life_time * 140) * 0.15",
-            "-3.0 + math.sin(q.life_time * 100) * 0.12",
-            3.5
-          ],
-          "rotation": [90, -8, "math.sin(q.life_time * 70) * 2"]
+          "rotation": [25.82057, 53.4914, -101.29989],
+          "position": [1, 33, 4],
+          "scale": 0.88
         }
       }
     },
     "animation.chim_marvel.stormbreaker_third_person": {
       "loop": true,
-      "animation_length": 2,
       "bones": {
         "weapon": {
-          "rotation": [0, 0, 0]
+          "rotation": [90, 0, 0],
+          "position": [0, 27, 4]
         }
       }
     },
@@ -129,11 +142,59 @@
       "animation_length": 0.5,
       "bones": {
         "weapon": {
-          "rotation": [
-            "90 + q.life_time * 720",
-            0,
-            0
-          ]
+          "rotation": [90, 0, 0]
+        }
+      }
+    },
+    "animation.chim_marvel.gungnir_projectile_fly": {
+      "loop": true,
+      "animation_length": 0.5,
+      "bones": {
+        "weapon": {
+          "rotation": [90, 0, 0]
+        }
+      }
+    },
+    "animation.chim_marvel.thanos_sword_first_person": {
+      "loop": true,
+      "bones": {
+        "weapon": {
+          "rotation": [79, 120, -240],
+          "position": [3, 29, 11],
+          "scale": 1.5
+        }
+      }
+    },
+    "animation.chim_marvel.thanos_sword_third_person": {
+      "loop": true,
+      "bones": {
+        "weapon": {
+          "rotation": [-90, 0, 0],
+          "position": [0.5, 22.5, 13.5],
+          "scale": 1.495
+        }
+      }
+    },
+    "animation.chim_marvel.thanos_sword_use": {
+      "animation_length": 0.583,
+      "bones": {
+        "weapon": {
+          "rotation": {
+            "0.0": { "post": [0, 0, 0], "lerp_mode": "catmullrom" },
+            "0.25": { "post": [0, 50, 0], "lerp_mode": "catmullrom" },
+            "0.5": [0, 0, 0]
+          },
+          "position": {
+            "0.0": { "post": [0, 0, 0], "lerp_mode": "catmullrom" },
+            "0.25": { "post": [9, -25, 0], "lerp_mode": "catmullrom" },
+            "0.5": [0, 0, 0]
+          }
+        },
+        "pivot": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.5": [-360, 0, 0]
+          }
         }
       }
     }

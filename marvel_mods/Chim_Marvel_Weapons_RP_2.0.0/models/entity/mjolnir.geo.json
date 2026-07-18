@@ -1,14 +1,12 @@
 {
   "format_version": "1.12.0",
   "minecraft:geometry": [{
-    "description": { "identifier": "geometry.chim_marvel.mjolnir", "texture_width": 64, "texture_height": 64, "visible_bounds_width": 3, "visible_bounds_height": 3, "visible_bounds_offset": [0, 0.5, 0] },
+    "description": { "identifier": "geometry.chim_marvel.mjolnir", "texture_width": 256, "texture_height": 256, "visible_bounds_width": 3, "visible_bounds_height": 3, "visible_bounds_offset": [0, 0.5, 0] },
     "bones": [{
       "name": "weapon", "pivot": [0, 0, 0], "binding": "q.item_slot_to_bone_name(context.item_slot)",
       "cubes": [
-        { "origin": [-1, -6, -1], "size": [2, 15, 2], "uv": [0, 0] },
-        { "origin": [-5, 8, -3], "size": [10, 7, 6], "uv": [8, 0] },
-        { "origin": [-4, 15, -2], "size": [8, 1, 4], "uv": [8, 18] },
-        { "origin": [-1.5, -8, -1.5], "size": [3, 2, 3], "uv": [0, 18] }
+        { "origin": [-12, -8, -0.1], "size": [24, 24, 0.2], "uv": { "north": { "uv": [0, 0], "uv_size": [256, 256] }, "south": { "uv": [0, 0], "uv_size": [256, 256] } } },
+        { "origin": [-0.1, -8, -12], "size": [0.2, 24, 24], "uv": { "east": { "uv": [0, 0], "uv_size": [256, 256] }, "west": { "uv": [0, 0], "uv_size": [256, 256] } } }
       ]
     }]
   }]

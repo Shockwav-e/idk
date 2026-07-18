@@ -2,7 +2,7 @@
   "format_version": "1.10.0",
   "minecraft:client_entity": { "description": {
     "identifier": "chim_marvel:stormbreaker_projectile", "materials": { "default": "entity_alphatest" },
-    "textures": { "default": "textures/entity/stormbreaker" }, "geometry": { "default": "geometry.chim_marvel.axe_projectile" },
+    "textures": { "default": "textures/items/stormbreaker" }, "geometry": { "default": "geometry.chim_marvel.axe_projectile" },
     "animations": {
       "fly": "animation.chim_marvel.stormbreaker_fly"
     },

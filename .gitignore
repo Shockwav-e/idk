@@ -4,3 +4,6 @@
 !.gitignore
 !marvel_mods/
 !marvel_mods/**
+
+# Local image-processing utility and its generated files.
+/background-removal-tool/

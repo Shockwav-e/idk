@@ -15,7 +15,7 @@
       "minecraft:use_animation": "spear",
       "minecraft:use_modifiers": { "use_duration": 0.1, "movement_modifier": 0.85 },
       "minecraft:hand_equipped": true,
-      "minecraft:interact_button": "Fire Gungnir"
+      "minecraft:interact_button": "Throw Gungnir"
     }
   }
 }

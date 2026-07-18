@@ -2,25 +2,27 @@
   "format_version": "1.10.0",
   "minecraft:attachable": {
     "description": {
-      "identifier": "chim_marvel:stormbreaker",
+      "identifier": "chim_marvel:thanos_double_edge_sword",
       "materials": {
         "default": "entity_alphatest",
         "enchanted": "entity_alphatest_glint"
       },
       "textures": {
-        "default": "textures/items/stormbreaker",
+        "default": "textures/items/thanos_double_edge_sword",
         "enchanted": "textures/misc/enchanted_item_glint"
       },
-      "geometry": { "default": "geometry.chim_marvel.stormbreaker" },
+      "geometry": { "default": "geometry.chim_marvel.thanos_double_edge_sword" },
       "animations": {
-        "first_person": "animation.chim_marvel.stormbreaker_first_person",
-        "third_person": "animation.chim_marvel.stormbreaker_third_person"
+        "first_person": "animation.chim_marvel.thanos_sword_first_person",
+        "third_person": "animation.chim_marvel.thanos_sword_third_person",
+        "use": "animation.chim_marvel.thanos_sword_use"
       },
       "scripts": {
         "parent_setup": "variable.hat_layer_visible = 0.0;",
         "animate": [
           { "first_person": "c.is_first_person" },
-          { "third_person": "!c.is_first_person" }
+          { "third_person": "!c.is_first_person" },
+          { "use": "c.is_first_person && q.is_using_item" }
         ]
       },
       "render_controllers": ["controller.render.item_default"]

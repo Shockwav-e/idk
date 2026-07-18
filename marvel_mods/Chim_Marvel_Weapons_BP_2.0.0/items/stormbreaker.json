@@ -12,7 +12,7 @@
       "minecraft:enchantable": { "value": 18, "slot": "sword" },
       "minecraft:tags": { "tags": ["minecraft:is_sword"] },
       "minecraft:cooldown": { "category": "chim_stormbreaker", "duration": 0.05 },
-      "minecraft:use_animation": "spear",
+      "minecraft:use_animation": "none",
       "minecraft:use_modifiers": { "use_duration": 0.15, "movement_modifier": 0.75 },
       "minecraft:hand_equipped": true,
       "minecraft:interact_button": "Throw (Sneak: Lightning)"

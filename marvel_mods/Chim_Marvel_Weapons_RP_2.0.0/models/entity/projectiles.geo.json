@@ -5,8 +5,8 @@
     {
       "description": {
         "identifier": "geometry.chim_marvel.hammer_projectile",
-        "texture_width": 64,
-        "texture_height": 64,
+        "texture_width": 256,
+        "texture_height": 256,
         "visible_bounds_width": 3,
         "visible_bounds_height": 3
       },
@@ -15,8 +15,8 @@
           "name": "weapon",
           "pivot": [0, 0, 0],
           "cubes": [
-            { "origin": [-1, -8, -1], "size": [2, 15, 2], "uv": [0, 0] },
-            { "origin": [-5, 6, -3], "size": [10, 7, 6], "uv": [8, 0] }
+            { "origin": [-12, -8, -0.1], "size": [24, 24, 0.2], "uv": { "north": { "uv": [0, 0], "uv_size": [256, 256] }, "south": { "uv": [0, 0], "uv_size": [256, 256] } } },
+            { "origin": [-0.1, -8, -12], "size": [0.2, 24, 24], "uv": { "east": { "uv": [0, 0], "uv_size": [256, 256] }, "west": { "uv": [0, 0], "uv_size": [256, 256] } } }
           ]
         }
       ]
@@ -24,8 +24,8 @@
     {
       "description": {
         "identifier": "geometry.chim_marvel.axe_projectile",
-        "texture_width": 64,
-        "texture_height": 64,
+        "texture_width": 256,
+        "texture_height": 256,
         "visible_bounds_width": 4,
         "visible_bounds_height": 4
       },
@@ -34,9 +34,27 @@
           "name": "weapon",
           "pivot": [0, 0, 0],
           "cubes": [
-            { "origin": [-1, -10, -1], "size": [2, 24, 2], "uv": [0, 0] },
-            { "origin": [-4, 11, -2], "size": [8, 6, 4], "uv": [12, 0] },
-            { "origin": [4, 9, -2], "size": [6, 10, 4], "uv": [12, 14] }
+            { "origin": [-14, -9, -0.1], "size": [28, 28, 0.2], "uv": { "north": { "uv": [0, 0], "uv_size": [256, 256] }, "south": { "uv": [0, 0], "uv_size": [256, 256] } } },
+            { "origin": [-0.1, -9, -14], "size": [0.2, 28, 28], "uv": { "east": { "uv": [0, 0], "uv_size": [256, 256] }, "west": { "uv": [0, 0], "uv_size": [256, 256] } } }
+          ]
+        }
+      ]
+    },
+    {
+      "description": {
+        "identifier": "geometry.chim_marvel.thanos_double_edge_sword_projectile",
+        "texture_width": 256,
+        "texture_height": 256,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4
+      },
+      "bones": [
+        {
+          "name": "weapon",
+          "pivot": [0, 0, 0],
+          "cubes": [
+            { "origin": [-15, -15, -0.1], "size": [30, 30, 0.2], "uv": { "north": { "uv": [0, 0], "uv_size": [256, 256] }, "south": { "uv": [0, 0], "uv_size": [256, 256] } } },
+            { "origin": [-0.1, -15, -15], "size": [0.2, 30, 30], "uv": { "east": { "uv": [0, 0], "uv_size": [256, 256] }, "west": { "uv": [0, 0], "uv_size": [256, 256] } } }
           ]
         }
       ]
@@ -77,6 +95,25 @@
             { "origin": [-4, -4, -0.5], "size": [8, 8, 1], "uv": [0, 0] },
             { "origin": [-4, -0.5, -4], "size": [8, 1, 8], "uv": [0, 0] },
             { "origin": [-0.5, -4, -4], "size": [1, 8, 8], "uv": [0, 0] }
+          ]
+        }
+      ]
+    },
+    {
+      "description": {
+        "identifier": "geometry.chim_marvel.gungnir_projectile",
+        "texture_width": 256,
+        "texture_height": 256,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 5
+      },
+      "bones": [
+        {
+          "name": "weapon",
+          "pivot": [0, 0, 0],
+          "cubes": [
+            { "origin": [-12, -17, -0.1], "size": [24, 44, 0.2], "uv": { "north": { "uv": [0, 0], "uv_size": [256, 256] }, "south": { "uv": [0, 0], "uv_size": [256, 256] } } },
+            { "origin": [-0.1, -17, -12], "size": [0.2, 44, 24], "uv": { "east": { "uv": [0, 0], "uv_size": [256, 256] }, "west": { "uv": [0, 0], "uv_size": [256, 256] } } }
           ]
         }
       ]

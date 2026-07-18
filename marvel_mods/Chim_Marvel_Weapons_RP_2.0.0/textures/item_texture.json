@@ -6,6 +6,7 @@
     "stormbreaker": { "textures": "textures/items/stormbreaker" },
     "captain_shield": { "textures": "textures/items/captain_shield" },
     "gungnir": { "textures": "textures/items/gungnir" },
+    "thanos_double_edge_sword": { "textures": "textures/items/thanos_double_edge_sword" },
     "vibranium": { "textures": "textures/items/vibranium" },
     "uru_metal": { "textures": "textures/items/uru_metal" }
   }

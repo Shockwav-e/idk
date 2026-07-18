@@ -2,12 +2,12 @@
   "format_version": "1.10.0",
   "minecraft:client_entity": {
     "description": {
-      "identifier": "chim_marvel:mjolnir_projectile",
+      "identifier": "chim_marvel:gungnir_projectile",
       "materials": { "default": "entity_alphatest" },
-      "textures": { "default": "textures/items/mjolnir" },
-      "geometry": { "default": "geometry.chim_marvel.hammer_projectile" },
+      "textures": { "default": "textures/items/gungnir" },
+      "geometry": { "default": "geometry.chim_marvel.gungnir_projectile" },
       "animations": {
-        "fly": "animation.chim_marvel.mjolnir_projectile_fly"
+        "fly": "animation.chim_marvel.gungnir_projectile_fly"
       },
       "scripts": { "animate": ["fly"] },
       "render_controllers": ["controller.render.default"]

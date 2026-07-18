@@ -3,7 +3,6 @@ import { world, system, ItemStack, EquipmentSlot } from "@minecraft/server";
 const NS = "chim_marvel";
 const activeThrows = new Map();
 const activeThrowByPlayer = new Map();
-const energyShots = new Map();
 const projectileStats = new Map();
 const bossTimers = new Map();
 const heldWeaponByPlayer = new Map();
@@ -12,9 +11,10 @@ const arenaOrigins = new Map(); // bossId -> {x, y, z} spawn center
 const ARENA_RADIUS = 20;
 const THROW_DAMAGE = {
   [`${NS}:mjolnir_projectile`]: 45,
-  [`${NS}:stormbreaker_projectile`]: 65,
+  [`${NS}:stormbreaker_projectile`]: 85,
   [`${NS}:shield_projectile`]: 32,
-  [`${NS}:gungnir_bolt`]: 50,
+  [`${NS}:gungnir_projectile`]: 50,
+  [`${NS}:thanos_double_edge_sword_projectile`]: 48,
   [`${NS}:cat_bolt`]: 18,
 };
 const WEAPON_HELP = {
@@ -24,7 +24,9 @@ const WEAPON_HELP = {
     "§3Stormbreaker §7— Use: throw | Sneak + use: thunder (3s)",
   [`${NS}:captain_shield`]:
     "§9Captain's Shield §7— Offhand: block | Use: ricochet (2s)",
-  [`${NS}:gungnir`]: "§6Gungnir §7— Use: straight 50-damage energy bolt (2s)",
+  [`${NS}:gungnir`]: "§6Gungnir §7— Use: explosive returning throw (2s)",
+  [`${NS}:thanos_double_edge_sword`]:
+    "§8Thanos Double-Edge Sword §7— Use: spinning ricochet throw",
 };
 const HOLD_BUFFS = {
   [`${NS}:mjolnir`]: [
@@ -45,13 +47,12 @@ const HOLD_BUFFS = {
   [`${NS}:gungnir`]: [
     { id: "speed", amplifier: 1 },
     { id: "fire_resistance", amplifier: 0 },
-    { id: "night_vision", amplifier: 0 },
   ],
 };
 const COOLDOWN_TICKS = {
   mjolnir_lightning: 60,
   stormbreaker_lightning: 60,
-  gungnir_bolt: 40,
+  gungnir_throw: 40,
 };
 let thunderResetRun = 0;
 
@@ -84,7 +85,12 @@ const SOUND_LAYERS = {
   shield_throw: [["item.trident.throw", 0.8, 1.35], ["random.bow", 0.7, 0.7]],
   shield_bounce: [["random.anvil_land", 0.35, 1.8], ["random.orb", 0.55, 0.7]],
   shield_recall: [["item.trident.return", 0.8, 1.3], ["random.anvil_land", 0.3, 1.45]],
+  gungnir_throw: [["item.trident.throw", 1.1, 0.82], ["mob.evocation_illager.cast_spell", 0.35, 1.6]],
+  gungnir_recall: [["item.trident.return", 1.1, 0.82], ["random.orb", 0.45, 1.2]],
   gungnir_impact: [["mob.evocation_illager.cast_spell", 0.8, 1.8], ["random.explode", 0.35, 1.4]],
+  thanos_sword_throw: [["item.trident.throw", 1.1, 0.62], ["random.anvil_land", 0.2, 1.4]],
+  thanos_sword_bounce: [["random.anvil_land", 0.5, 1.35], ["item.trident.hit_ground", 0.7, 0.8]],
+  thanos_sword_recall: [["item.trident.return", 1.0, 0.65], ["random.anvil_land", 0.25, 1.25]],
   weapon_impact: [["random.explode", 0.7, 1.15], ["item.trident.hit_ground", 0.9, 0.7]],
 };
 
@@ -98,7 +104,7 @@ function particle(dimension, id, location) {
   try { dimension.spawnParticle(id, location); } catch {}
 }
 
-function impactEffect(projectile, type) {
+function impactEffect(projectile, type, owner) {
   let dimension, location;
   try {
     dimension = projectile.dimension;
@@ -107,15 +113,37 @@ function impactEffect(projectile, type) {
     return; // entity already removed before impact effect could run
   }
   if (type === "gungnir") {
+    try {
+      dimension.createExplosion(location, 2.5, {
+        breaksBlocks: false,
+        causesFire: false,
+        source: valid(owner) ? owner : undefined,
+      });
+    } catch {}
+    particle(dimension, "minecraft:large_explosion", location);
     particle(dimension, "minecraft:totem_particle", location);
     particle(dimension, "minecraft:critical_hit_emitter", location);
     playWeaponSound(dimension, "gungnir_impact", location);
+    return;
+  }
+  if (type === "thanos_sword") {
+    particle(dimension, "minecraft:critical_hit_emitter", location);
+    playWeaponSound(dimension, "thanos_sword_bounce", location);
     return;
   }
   particle(dimension, "minecraft:large_explosion", location);
   particle(dimension, type === "shield" ? "minecraft:critical_hit_emitter" : "minecraft:electric_spark_particle", location);
   if (type === "mjolnir" || type === "stormbreaker") {
     try { dimension.spawnEntity("minecraft:lightning_bolt", location); } catch {}
+    if (type === "stormbreaker") {
+      particle(dimension, "minecraft:critical_hit_emitter", location);
+      system.runTimeout(() => {
+        try { dimension.spawnEntity("minecraft:lightning_bolt", location); } catch {}
+      }, 3);
+      system.runTimeout(() => {
+        try { dimension.spawnEntity("minecraft:lightning_bolt", location); } catch {}
+      }, 7);
+    }
   }
   playWeaponSound(dimension, type === "shield" ? "shield_bounce" : "weapon_impact", location);
 }
@@ -126,7 +154,13 @@ function releaseThrow(state, caught = false) {
     if (caught) {
       const cue = state.type === "shield" ? "shield_recall" : `${state.type}_recall`;
       playWeaponSound(state.owner.dimension, cue, state.owner.location);
-      particle(state.owner.dimension, "minecraft:electric_spark_particle", state.owner.getHeadLocation());
+      particle(
+        state.owner.dimension,
+        state.type === "thanos_sword"
+          ? "minecraft:critical_hit_emitter"
+          : "minecraft:electric_spark_particle",
+        state.owner.getHeadLocation(),
+      );
       state.owner.onScreenDisplay.setActionBar("§aWeapon caught — throw ready.");
     }
     if (valid(state.projectile)) state.projectile.remove();
@@ -239,7 +273,7 @@ function beginThunder(player, power) {
 }
 
 function launch(player, type, itemStack) {
-  if (type !== "gungnir" && activeThrowByPlayer.has(player.id)) {
+  if (activeThrowByPlayer.has(player.id)) {
     player.onScreenDisplay.setActionBar(
       "§cCatch your active weapon before throwing again.",
     );
@@ -249,9 +283,10 @@ function launch(player, type, itemStack) {
     mjolnir: `${NS}:mjolnir_projectile`,
     stormbreaker: `${NS}:stormbreaker_projectile`,
     shield: `${NS}:shield_projectile`,
-    gungnir: `${NS}:gungnir_bolt`,
+    gungnir: `${NS}:gungnir_projectile`,
+    thanos_sword: `${NS}:thanos_double_edge_sword_projectile`,
   };
-  const speeds = { mjolnir: 1.25, stormbreaker: 1.35, shield: 1.65, gungnir: 4.5 };
+  const speeds = { mjolnir: 1.25, stormbreaker: 1.55, shield: 1.65, gungnir: 1.55, thanos_sword: 1.7 };
   const head = player.getHeadLocation();
   const view = player.getViewDirection();
   const direction = normalize(view);
@@ -271,40 +306,25 @@ function launch(player, type, itemStack) {
     );
     const stats = readEnchantments(itemStack);
     projectileStats.set(projectile.id, stats);
-    if (type !== "gungnir") {
-      const state = {
-        projectile,
-        owner: player,
-        type,
-        direction,
-        speed,
-        age: 0,
-        returning: false,
-        hits: new Set(),
-        loyalty: stats.loyalty,
-      };
-      activeThrows.set(projectile.id, state);
-      activeThrowByPlayer.set(player.id, state);
-    } else {
-      energyShots.set(projectile.id, { projectile, owner: player, age: 0 });
-    }
+    const state = {
+      projectile,
+      owner: player,
+      type,
+      direction,
+      speed,
+      age: 0,
+      returning: false,
+      hits: new Set(),
+      ricochets: 0,
+      loyalty: stats.loyalty,
+    };
+    activeThrows.set(projectile.id, state);
+    activeThrowByPlayer.set(player.id, state);
     const damage = THROW_DAMAGE[projectile.typeId] ?? 0;
     player.onScreenDisplay.setActionBar(
-      type === "gungnir"
-        ? `§6Gungnir fired an energy bolt §7— §c${damage} damage §8(staff stays in hand)`
-        : `§f${type === "shield" ? "Shield" : type[0].toUpperCase() + type.slice(1)} thrown §7— §c${damage} damage`,
+      `§f${type === "shield" ? "Shield" : type[0].toUpperCase() + type.slice(1)} thrown §7— §c${damage} damage`,
     );
-    if (type === "gungnir") {
-      try {
-        player.dimension.playSound(
-          "mob.evocation_illager.cast_spell",
-          player.location,
-          { volume: 1, pitch: 1.6 },
-        );
-      } catch {}
-    } else {
-      playWeaponSound(player.dimension, `${type}_throw`, start);
-    }
+    playWeaponSound(player.dimension, `${type}_throw`, start);
     return true;
   } catch (error) {
     tell(player, `§cWeapon failed to launch: ${error}`);
@@ -332,21 +352,30 @@ function useWeapon(event) {
   } else if (id === `${NS}:captain_shield`) {
     launch(player, "shield", event.itemStack);
   } else if (id === `${NS}:gungnir`) {
-    if (!tryWeaponCooldown(player, "gungnir_bolt")) return;
+    if (!tryWeaponCooldown(player, "gungnir_throw")) return;
     launch(player, "gungnir", event.itemStack);
+  } else if (id === `${NS}:thanos_double_edge_sword`) {
+    launch(player, "thanos_sword", event.itemStack);
   }
 }
 
 world.afterEvents.itemUse.subscribe(useWeapon);
 
-function nextShieldTarget(state, origin) {
+function isRicochetWeapon(type) {
+  return type === "shield" || type === "thanos_sword";
+}
+
+function nextRicochetTarget(state, origin) {
   try {
     return state.owner.dimension
       .getEntities({
         location: origin,
-        maxDistance: 20,
+        maxDistance: 24,
         families: ["monster"],
-        excludeTypes: [`${NS}:shield_projectile`],
+        excludeTypes: [
+          `${NS}:shield_projectile`,
+          `${NS}:thanos_double_edge_sword_projectile`,
+        ],
       })
       .filter((e) => valid(e) && !state.hits.has(e.id))
       .sort(
@@ -357,17 +386,100 @@ function nextShieldTarget(state, origin) {
   }
 }
 
+function entityAimPoint(entity) {
+  try {
+    return entity.getHeadLocation();
+  } catch {
+    return {
+      x: entity.location.x,
+      y: entity.location.y + 0.6,
+      z: entity.location.z,
+    };
+  }
+}
+
+function stopProjectile(state) {
+  try { state.projectile.clearVelocity(); } catch {}
+}
+
+function beginReturn(state) {
+  stopProjectile(state);
+  state.returning = true;
+}
+
+function redirectRicochet(state, origin) {
+  if (!isRicochetWeapon(state.type) || state.ricochets >= 3) return false;
+  const next = nextRicochetTarget(state, origin);
+  if (!next) return false;
+  try {
+    const target = entityAimPoint(next);
+    const aim = normalize(subtract(target, origin));
+    const ricochet = state.projectile.getComponent("minecraft:projectile");
+    if (!ricochet) throw new Error("Ricochet projectile component unavailable");
+    state.projectile.teleport(
+      {
+        x: origin.x + aim.x * 0.45,
+        y: origin.y + aim.y * 0.45,
+        z: origin.z + aim.z * 0.45,
+      },
+      { facingLocation: target },
+    );
+    state.direction = aim;
+    state.speed = 2.4;
+    state.age = 0;
+    state.ricochets++;
+    ricochet.shoot(
+      { x: aim.x * state.speed, y: aim.y * state.speed, z: aim.z * state.speed },
+      { uncertainty: 0 },
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function ringBellLikeArrow(event, state) {
+  let blockHit;
+  try { blockHit = event.getBlockHit(); } catch { return; }
+  if (blockHit?.block?.typeId !== "minecraft:bell") return;
+  const direction = normalize(event.hitVector);
+  const start = {
+    x: event.location.x - direction.x * 0.4,
+    y: event.location.y - direction.y * 0.4,
+    z: event.location.z - direction.z * 0.4,
+  };
+  try {
+    event.dimension.playSound("block.bell.hit", event.location, {
+      volume: 0.65,
+      pitch: 1,
+    });
+    const arrow = event.dimension.spawnEntity("minecraft:arrow", start);
+    const projectile = arrow.getComponent("minecraft:projectile");
+    if (!projectile) throw new Error("Arrow projectile component unavailable");
+    projectile.owner = state.owner;
+    projectile.shoot(
+      { x: direction.x * 1.2, y: direction.y * 1.2, z: direction.z * 1.2 },
+      { uncertainty: 0 },
+    );
+    system.runTimeout(() => {
+      try { if (valid(arrow)) arrow.remove(); } catch {}
+    }, 5);
+  } catch {}
+}
+
 world.afterEvents.projectileHitEntity.subscribe((event) => {
   const state = activeThrows.get(event.projectile?.id);
+  if (!state || state.returning) return;
   const hit = event.getEntityHit()?.entity;
+  if (hit && state.hits.has(hit.id)) return;
+  stopProjectile(state);
+  if (hit) state.hits.add(hit.id);
   const stats = projectileStats.get(event.projectile?.id);
   if (hit) {
     try {
       const baseDamage = THROW_DAMAGE[event.projectile.typeId] ?? 0;
       const totalDamage = baseDamage + (stats?.damageBonus ?? 0);
-      const owner =
-        state?.owner ??
-        event.projectile.getComponent("minecraft:projectile")?.owner;
+      const owner = state.owner;
       if (totalDamage > 0) {
         try {
           if (valid(owner))
@@ -393,52 +505,36 @@ world.afterEvents.projectileHitEntity.subscribe((event) => {
           0.18 * stats.knockback,
         );
       }
-      if (stats?.channeling)
+      if (
+        stats?.channeling &&
+        (state.type === "mjolnir" || state.type === "stormbreaker")
+      )
         hit.dimension.spawnEntity("minecraft:lightning_bolt", hit.location);
     } catch {}
   }
-  impactEffect(event.projectile, state?.type ?? (event.projectile?.typeId === `${NS}:gungnir_bolt` ? "gungnir" : "other"));
-  if (!state) {
-    if (!energyShots.has(event.projectile?.id)) projectileStats.delete(event.projectile?.id);
-    return;
+  impactEffect(event.projectile, state.type, state.owner);
+  if (isRicochetWeapon(state.type) && state.hits.size < 3) {
+    if (redirectRicochet(state, event.projectile.location)) return;
   }
-  if (hit) state.hits.add(hit.id);
-  if (state.type === "shield" && state.hits.size < 3) {
-    const next = nextShieldTarget(state, event.projectile.location);
-    if (next) {
-      try {
-        const aim = normalize(
-          subtract(
-            {
-              x: next.location.x,
-              y: next.location.y + 0.6,
-              z: next.location.z,
-            },
-            event.projectile.location,
-          ),
-        );
-        const ricochet = event.projectile.getComponent("minecraft:projectile");
-        if (!ricochet) throw new Error("Shield projectile component unavailable");
-        ricochet.shoot(
-          { x: aim.x * 2.4, y: aim.y * 2.4, z: aim.z * 2.4 },
-          { uncertainty: 0 },
-        );
-        return;
-      } catch {}
-    }
-  }
-  state.returning = true;
+  beginReturn(state);
 });
 
 world.afterEvents.projectileHitBlock.subscribe((event) => {
   const state = activeThrows.get(event.projectile?.id);
-  impactEffect(event.projectile, state?.type ?? (event.projectile?.typeId === `${NS}:gungnir_bolt` ? "gungnir" : "other"));
-  if (state) state.returning = true;
-  else {
-    try { if (valid(event.projectile)) event.projectile.remove(); } catch {}
-    energyShots.delete(event.projectile?.id);
-    projectileStats.delete(event.projectile?.id);
+  if (!state || state.returning) return;
+  stopProjectile(state);
+  ringBellLikeArrow(event, state);
+  impactEffect(event.projectile, state.type, state.owner);
+  if (isRicochetWeapon(state.type)) {
+    const incoming = normalize(event.hitVector);
+    const bounceOrigin = {
+      x: event.location.x - incoming.x * 0.45,
+      y: event.location.y - incoming.y * 0.45,
+      z: event.location.z - incoming.z * 0.45,
+    };
+    if (redirectRicochet(state, bounceOrigin)) return;
   }
+  beginReturn(state);
 });
 
 system.runInterval(() => {
@@ -449,7 +545,7 @@ system.runInterval(() => {
       continue;
     }
     if (!state.returning) {
-      state.speed = Math.min(state.speed + 0.055, state.type === "shield" ? 2.45 : 2.2);
+      state.speed = Math.min(state.speed + (state.type === "stormbreaker" ? 0.075 : 0.055), state.type === "stormbreaker" ? 2.75 : isRicochetWeapon(state.type) ? 2.45 : 2.2);
       try {
         state.projectile.getComponent("minecraft:projectile").shoot(
           { x: state.direction.x * state.speed, y: state.direction.y * state.speed, z: state.direction.z * state.speed },
@@ -457,9 +553,9 @@ system.runInterval(() => {
         );
       } catch {}
     }
-    if (state.age > (state.type === "shield" ? 22 : 16)) state.returning = true;
+    if (state.age > (isRicochetWeapon(state.type) ? 22 : 16)) state.returning = true;
     if ((state.age & 1) === 0) {
-      const trail = state.type === "shield" ? "minecraft:critical_hit_emitter" : "minecraft:electric_spark_particle";
+      const trail = isRicochetWeapon(state.type) ? "minecraft:critical_hit_emitter" : "minecraft:electric_spark_particle";
       particle(state.projectile.dimension, trail, state.projectile.location);
     }
     if (state.returning) {
@@ -473,15 +569,22 @@ system.runInterval(() => {
           continue;
         }
         const dir = normalize(delta);
-        const returnAge = Math.max(0, state.age - (state.type === "shield" ? 22 : 16));
+        const returnAge = Math.max(0, state.age - (isRicochetWeapon(state.type) ? 22 : 16));
         const step = Math.min(0.75 + Math.min(returnAge * 0.085, 1.35) + state.loyalty * 0.25, dist);
+        const facingLocation = state.type === "mjolnir" || state.type === "gungnir"
+          ? {
+              x: pos.x - dir.x,
+              y: pos.y - dir.y,
+              z: pos.z - dir.z,
+            }
+          : target;
         state.projectile.teleport(
           {
             x: pos.x + dir.x * step,
             y: pos.y + dir.y * step,
             z: pos.z + dir.z * step,
           },
-          { facingLocation: target },
+          { facingLocation },
         );
       } catch {
         releaseThrow(state);
@@ -489,16 +592,6 @@ system.runInterval(() => {
     }
   }
 
-  for (const [id, shot] of energyShots) {
-    shot.age++;
-    if (!valid(shot.projectile) || shot.age > 70) {
-      try { if (valid(shot.projectile)) shot.projectile.remove(); } catch {}
-      energyShots.delete(id);
-      projectileStats.delete(id);
-      continue;
-    }
-    particle(shot.projectile.dimension, "minecraft:totem_particle", shot.projectile.location);
-  }
 }, 1);
 
 system.runInterval(() => {

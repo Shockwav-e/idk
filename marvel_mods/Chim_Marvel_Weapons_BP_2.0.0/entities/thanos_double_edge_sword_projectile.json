@@ -1,0 +1,23 @@
+{
+  "format_version": "1.21.40",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "chim_marvel:thanos_double_edge_sword_projectile",
+      "is_spawnable": false,
+      "is_summonable": true
+    },
+    "components": {
+      "minecraft:collision_box": { "width": 0.75, "height": 0.75 },
+      "minecraft:projectile": { "gravity": 0, "power": 3.0, "knockback": true, "multiple_targets": false },
+      "minecraft:physics": { "has_gravity": false },
+      "minecraft:pushable": { "is_pushable": false, "is_pushable_by_piston": false },
+      "minecraft:timer": { "time": 8, "time_down_event": { "event": "chim_marvel:despawn" } }
+    },
+    "events": {
+      "chim_marvel:despawn": { "add": { "component_groups": ["chim_marvel:instant_despawn"] } }
+    },
+    "component_groups": {
+      "chim_marvel:instant_despawn": { "minecraft:instant_despawn": {} }
+    }
+  }
+}

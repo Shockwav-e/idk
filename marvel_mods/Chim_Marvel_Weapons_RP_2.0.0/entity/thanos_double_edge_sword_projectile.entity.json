@@ -1,0 +1,14 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "chim_marvel:thanos_double_edge_sword_projectile",
+      "materials": { "default": "entity_alphatest" },
+      "textures": { "default": "textures/items/thanos_double_edge_sword" },
+      "geometry": { "default": "geometry.chim_marvel.thanos_double_edge_sword_projectile" },
+      "animations": { "spin": "animation.chim_marvel.spin" },
+      "scripts": { "animate": ["spin"] },
+      "render_controllers": ["controller.render.default"]
+    }
+  }
+}
