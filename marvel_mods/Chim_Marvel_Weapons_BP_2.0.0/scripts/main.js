@@ -4,7 +4,6 @@ const NS = "chim_marvel";
 const activeThrows = new Map();
 const activeThrowByPlayer = new Map();
 const energyShots = new Map();
-const lastStormSpinByPlayer = new Map();
 const projectileStats = new Map();
 const bossTimers = new Map();
 const heldWeaponByPlayer = new Map();
@@ -255,8 +254,7 @@ function launch(player, type, itemStack) {
   const speeds = { mjolnir: 1.25, stormbreaker: 1.35, shield: 1.65, gungnir: 4.5 };
   const head = player.getHeadLocation();
   const view = player.getViewDirection();
-  const horizontal = normalize({ x: view.x, y: 0, z: view.z });
-  const direction = type === "gungnir" ? normalize(view) : horizontal;
+  const direction = normalize(view);
   const start = {
     x: head.x + direction.x * 1.35,
     y: head.y - 0.2,
@@ -287,14 +285,6 @@ function launch(player, type, itemStack) {
       };
       activeThrows.set(projectile.id, state);
       activeThrowByPlayer.set(player.id, state);
-      if (type === "stormbreaker") {
-        try {
-          const previous = lastStormSpinByPlayer.get(player.id) ?? Math.floor(Math.random() * 4);
-          const spin = (previous + 1 + Math.floor(Math.random() * 3)) % 4;
-          lastStormSpinByPlayer.set(player.id, spin);
-          projectile.setProperty("chim_marvel:spin_style", spin);
-        } catch {}
-      }
     } else {
       energyShots.set(projectile.id, { projectile, owner: player, age: 0 });
     }
@@ -462,7 +452,7 @@ system.runInterval(() => {
       state.speed = Math.min(state.speed + 0.055, state.type === "shield" ? 2.45 : 2.2);
       try {
         state.projectile.getComponent("minecraft:projectile").shoot(
-          { x: state.direction.x * state.speed, y: 0, z: state.direction.z * state.speed },
+          { x: state.direction.x * state.speed, y: state.direction.y * state.speed, z: state.direction.z * state.speed },
           { uncertainty: 0 },
         );
       } catch {}
@@ -653,6 +643,9 @@ system.runInterval(() => {
       arenaOrigins.delete(id);
     }
 }, 20);
+
+// Weather manipulation (thunder/storm) is ONLY triggered by Mjolnir and Stormbreaker
+// via beginThunder(). Gungnir has no weather effects whatsoever.
 
 // Naturally generated arenas contain a black/obsidian central dais. Entering it
 // wakes the encounter without requiring commands or ticking-area entities.

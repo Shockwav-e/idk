@@ -38,6 +38,36 @@
         },
         "death": { "animations": ["death"] }
       }
+    },
+    "controller.animation.chim_marvel.war_cat_locomotion": {
+      "initial_state": "idle",
+      "states": {
+        "idle": {
+          "animations": ["idle"],
+          "transitions": [
+            { "death": "!q.is_alive" },
+            { "attack": "q.has_target && q.modified_move_speed < 0.04" },
+            { "walk": "q.modified_move_speed >= 0.04" }
+          ]
+        },
+        "walk": {
+          "animations": ["walk"],
+          "transitions": [
+            { "death": "!q.is_alive" },
+            { "attack": "q.has_target && q.modified_move_speed < 0.04" },
+            { "idle": "q.modified_move_speed < 0.04" }
+          ]
+        },
+        "attack": {
+          "animations": ["attack"],
+          "transitions": [
+            { "death": "!q.is_alive" },
+            { "walk": "q.modified_move_speed >= 0.04" },
+            { "idle": "!q.has_target" }
+          ]
+        },
+        "death": { "animations": ["death"] }
+      }
     }
   }
 }

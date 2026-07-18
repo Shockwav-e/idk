@@ -4,10 +4,7 @@
     "description": {
       "identifier": "chim_marvel:stormbreaker_projectile",
       "is_spawnable": false,
-      "is_summonable": true,
-      "properties": {
-        "chim_marvel:spin_style": { "type": "int", "range": [0, 3], "default": 0, "client_sync": true }
-      }
+      "is_summonable": true
     },
     "components": {
       "minecraft:collision_box": { "width": 0.5, "height": 0.5 },

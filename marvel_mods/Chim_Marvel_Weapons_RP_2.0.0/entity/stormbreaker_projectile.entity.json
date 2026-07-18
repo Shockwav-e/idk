@@ -4,17 +4,9 @@
     "identifier": "chim_marvel:stormbreaker_projectile", "materials": { "default": "entity_alphatest" },
     "textures": { "default": "textures/entity/stormbreaker" }, "geometry": { "default": "geometry.chim_marvel.axe_projectile" },
     "animations": {
-      "vertical": "animation.chim_marvel.stormbreaker_vertical",
-      "horizontal": "animation.chim_marvel.stormbreaker_horizontal",
-      "diagonal": "animation.chim_marvel.stormbreaker_diagonal",
-      "mixed": "animation.chim_marvel.stormbreaker_mixed"
+      "fly": "animation.chim_marvel.stormbreaker_fly"
     },
-    "scripts": { "animate": [
-      { "vertical": "q.property('chim_marvel:spin_style') == 0" },
-      { "horizontal": "q.property('chim_marvel:spin_style') == 1" },
-      { "diagonal": "q.property('chim_marvel:spin_style') == 2" },
-      { "mixed": "q.property('chim_marvel:spin_style') == 3" }
-    ] },
+    "scripts": { "animate": ["fly"] },
     "render_controllers": ["controller.render.default"]
   } }
 }

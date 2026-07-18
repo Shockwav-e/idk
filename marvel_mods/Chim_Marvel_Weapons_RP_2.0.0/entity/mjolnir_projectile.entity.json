@@ -6,8 +6,6 @@
       "materials": { "default": "entity_alphatest" },
       "textures": { "default": "textures/entity/mjolnir" },
       "geometry": { "default": "geometry.chim_marvel.hammer_projectile" },
-      "animations": { "fly": "animation.chim_marvel.mjolnir_projectile_fly" },
-      "scripts": { "animate": ["fly"] },
       "render_controllers": ["controller.render.default"]
     }
   }

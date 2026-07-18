@@ -64,19 +64,19 @@
     {
       "description": {
         "identifier": "geometry.chim_marvel.bolt",
-        "texture_width": 64,
-        "texture_height": 64,
-        "visible_bounds_width": 2,
-        "visible_bounds_height": 2
+        "texture_width": 16,
+        "texture_height": 16,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3
       },
       "bones": [
         {
           "name": "weapon",
           "pivot": [0, 0, 0],
-          "rotation": [90, 0, 0],
           "cubes": [
-            { "origin": [-0.5, -8, -0.5], "size": [1, 16, 1], "uv": [0, 0] },
-            { "origin": [-1.5, 6, -1.5], "size": [3, 4, 3], "uv": [8, 0] }
+            { "origin": [-4, -4, -0.5], "size": [8, 8, 1], "uv": [0, 0] },
+            { "origin": [-4, -0.5, -4], "size": [8, 1, 8], "uv": [0, 0] },
+            { "origin": [-0.5, -4, -4], "size": [1, 8, 8], "uv": [0, 0] }
           ]
         }
       ]

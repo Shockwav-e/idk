@@ -3,7 +3,14 @@
   "minecraft:client_entity": { "description": {
     "identifier": "chim_marvel:war_cat", "materials": { "default": "entity_alphatest" },
     "textures": { "default": "textures/entity/war_cat" }, "geometry": { "default": "geometry.chim_marvel.mythic_cat" },
-    "animations": { "walk": "animation.chim_marvel.cat_walk" }, "scripts": { "animate": ["walk"] },
+    "animations": {
+      "idle": "animation.chim_marvel.cat_idle",
+      "walk": "animation.chim_marvel.cat_walk",
+      "attack": "animation.chim_marvel.cat_attack",
+      "death": "animation.chim_marvel.cat_death",
+      "locomotion": "controller.animation.chim_marvel.war_cat_locomotion"
+    },
+    "scripts": { "animate": ["locomotion"] },
     "render_controllers": ["controller.render.default"]
   } }
 }

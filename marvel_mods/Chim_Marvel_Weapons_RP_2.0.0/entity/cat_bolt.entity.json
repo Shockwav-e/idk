@@ -2,7 +2,7 @@
   "format_version": "1.10.0",
   "minecraft:client_entity": { "description": {
     "identifier": "chim_marvel:cat_bolt", "materials": { "default": "entity_alphatest" },
-    "textures": { "default": "textures/entity/cat_bolt" }, "geometry": { "default": "geometry.chim_marvel.bolt" },
+    "textures": { "default": "textures/entity/ghast/ghast_fireball" }, "geometry": { "default": "geometry.chim_marvel.bolt" },
     "animations": { "pulse": "animation.chim_marvel.pulse" }, "scripts": { "animate": ["pulse"] },
     "render_controllers": ["controller.render.default"]
   } }
