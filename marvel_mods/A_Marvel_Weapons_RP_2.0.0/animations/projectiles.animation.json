@@ -36,9 +36,9 @@
       "loop": true,
       "bones": {
         "weapon": {
-          "rotation": [81, 60, -60],
-          "position": [3, 30, 9],
-          "scale": 1.05
+          "rotation": [90, -5, 0],
+          "position": [1.5, -3, 3.5],
+          "scale": 0.62
         }
       }
     },
@@ -46,9 +46,9 @@
       "loop": true,
       "bones": {
         "weapon": {
-          "rotation": [90, 2.5, 0],
-          "position": [0.5, 22.5, 2.5],
-          "scale": 0.85
+          "rotation": [0, 0, -8],
+          "position": [0, -1, 0],
+          "scale": 0.68
         }
       }
     },
@@ -76,9 +76,9 @@
       "loop": true,
       "bones": {
         "weapon": {
-          "rotation": [25.82057, 53.4914, -101.29989],
-          "position": [1, 33, 4],
-          "scale": 0.88
+          "rotation": [90, -8, 0],
+          "position": [1.75, -3.5, 4],
+          "scale": 0.56
         }
       }
     },
@@ -86,8 +86,9 @@
       "loop": true,
       "bones": {
         "weapon": {
-          "rotation": [90, 0, 0],
-          "position": [0, 27, 4]
+          "rotation": [0, 0, -12],
+          "position": [0, -2.5, 0],
+          "scale": 0.58
         }
       }
     },
