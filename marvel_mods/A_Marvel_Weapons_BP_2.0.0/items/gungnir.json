@@ -14,8 +14,8 @@
       "minecraft:cooldown": { "category": "chim_gungnir", "duration": 0.45 },
       "minecraft:use_animation": "spear",
       "minecraft:use_modifiers": { "use_duration": 0.1, "movement_modifier": 0.85 },
-      "minecraft:hand_equipped": true,
-      "minecraft:interact_button": "Throw Gungnir"
+      "minecraft:durability": { "max_durability": 32767, "damage_chance": { "min": 0, "max": 0 } },
+      "minecraft:hand_equipped": true
     }
   }
 }

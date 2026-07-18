@@ -3,24 +3,22 @@
   "minecraft:attachable": {
     "description": {
       "identifier": "chim_marvel:captain_shield",
-      "materials": {
-        "default": "entity_alphatest",
-        "enchanted": "entity_alphatest_glint"
-      },
-      "textures": {
-        "default": "textures/entity/captain_shield",
-        "enchanted": "textures/misc/enchanted_item_glint"
-      },
+      "materials": { "default": "entity_alphatest", "enchanted": "entity_alphatest_glint" },
+      "textures": { "default": "textures/entity/captain_shield", "enchanted": "textures/misc/enchanted_item_glint" },
       "geometry": { "default": "geometry.chim_marvel.captain_shield" },
       "animations": {
         "first_person": "animation.chim_marvel.shield_first_person",
-        "third_person": "animation.chim_marvel.shield_third_person"
+        "third_person": "animation.chim_marvel.shield_third_person",
+        "block":        "animation.chim_marvel.shield_block",
+        "swing":        "animation.chim_marvel.shield_swing"
       },
       "scripts": {
         "parent_setup": "variable.hat_layer_visible = 0.0;",
         "animate": [
-          { "first_person": "c.is_first_person" },
-          { "third_person": "!c.is_first_person" }
+          { "first_person": "c.is_first_person && !(q.swing_progress > 0.0) && !q.is_sneaking" },
+          { "third_person": "!c.is_first_person" },
+          { "block": "c.is_first_person && q.is_sneaking" },
+          { "swing": "c.is_first_person && q.swing_progress > 0.0" }
         ]
       },
       "render_controllers": ["controller.render.item_default"]

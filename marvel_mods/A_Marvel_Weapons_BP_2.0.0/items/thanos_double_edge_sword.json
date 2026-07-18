@@ -16,9 +16,9 @@
       "minecraft:tags": { "tags": ["minecraft:is_sword"] },
       "minecraft:cooldown": { "category": "chim_thanos_sword", "duration": 0.05 },
       "minecraft:use_animation": "none",
-      "minecraft:use_modifiers": { "use_duration": 0.583, "movement_modifier": 0.8 },
-      "minecraft:hand_equipped": true,
-      "minecraft:interact_button": "Throw Double-Edge Sword"
+      "minecraft:use_modifiers": { "use_duration": 0.05, "movement_modifier": 0.8 },
+      "minecraft:durability": { "max_durability": 32767, "damage_chance": { "min": 0, "max": 0 } },
+      "minecraft:hand_equipped": true
     }
   }
 }

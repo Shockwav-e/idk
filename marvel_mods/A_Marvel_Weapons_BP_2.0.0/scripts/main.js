@@ -19,40 +19,42 @@ const THROW_DAMAGE = {
 };
 const WEAPON_HELP = {
   [`${NS}:mjolnir`]:
-    "§bMjolnir §7— Use: throw (2.5s) | Sneak + use: lightning (3s)",
+    "§bMjolnir §7— Use: throw (returns) | Sneak + use: aimed lightning",
   [`${NS}:stormbreaker`]:
-    "§3Stormbreaker §7— Use: throw | Sneak + use: thunder (3s)",
+    "§3Stormbreaker §7— Use: throw (returns) | Sneak + use: aimed thunder",
   [`${NS}:captain_shield`]:
-    "§9Captain's Shield §7— Offhand: block | Use: ricochet (2s)",
-  [`${NS}:gungnir`]: "§6Gungnir §7— Use: explosive returning throw (2s)",
+    "§9Captain's Shield §7— Sneak: raise & block all damage | Use: ricochet throw",
+  [`${NS}:gungnir`]: "§6Gungnir §7— Use: ghast fire burst | Sneak + use: throw (returns)",
   [`${NS}:thanos_double_edge_sword`]:
-    "§8Thanos Double-Edge Sword §7— Use: spinning ricochet throw",
+    "§8Thanos Double-Edge Sword §7— Use: spinning ricochet | Left-click: spinning melee",
 };
 const HOLD_BUFFS = {
+  // Amplifiers: 0=I, 1=II, 2=III, 3=IV — kept in a believable range
   [`${NS}:mjolnir`]: [
-    { id: "strength", amplifier: 1 },
-    { id: "resistance", amplifier: 2 },
-    { id: "health_boost", amplifier: 3 },
+    { id: "strength", amplifier: 2 },       // Strength III
+    { id: "resistance", amplifier: 2 },     // Resistance III
+    { id: "health_boost", amplifier: 2 },   // Health Boost III (+4 hearts)
   ],
   [`${NS}:stormbreaker`]: [
-    { id: "strength", amplifier: 2 },
-    { id: "resistance", amplifier: 2 },
-    { id: "slow_falling", amplifier: 0 },
+    { id: "strength", amplifier: 3 },       // Strength IV
+    { id: "resistance", amplifier: 2 },     // Resistance III
+    { id: "slow_falling", amplifier: 0 },   // Slow Falling I
   ],
   [`${NS}:captain_shield`]: [
-    { id: "resistance", amplifier: 3 },
-    { id: "fire_resistance", amplifier: 0 },
-    { id: "absorption", amplifier: 1 },
+    { id: "resistance", amplifier: 3 },     // Resistance IV
+    { id: "fire_resistance", amplifier: 0 }, // Fire Resistance I
+    { id: "absorption", amplifier: 1 },     // Absorption II (+4 hearts)
   ],
   [`${NS}:gungnir`]: [
-    { id: "speed", amplifier: 1 },
-    { id: "fire_resistance", amplifier: 0 },
+    { id: "speed", amplifier: 1 },          // Speed II
+    { id: "fire_resistance", amplifier: 0 }, // Fire Resistance I
   ],
 };
 const COOLDOWN_TICKS = {
   mjolnir_lightning: 60,
   stormbreaker_lightning: 60,
   gungnir_throw: 40,
+  gungnir_fire: 60,
 };
 let thunderResetRun = 0;
 
@@ -85,6 +87,7 @@ const SOUND_LAYERS = {
   shield_throw: [["item.trident.throw", 0.8, 1.35], ["random.bow", 0.7, 0.7]],
   shield_bounce: [["random.anvil_land", 0.35, 1.8], ["random.orb", 0.55, 0.7]],
   shield_recall: [["item.trident.return", 0.8, 1.3], ["random.anvil_land", 0.3, 1.45]],
+  shield_block: [["random.anvil_land", 0.9, 1.7], ["random.orb", 0.5, 1.3]],
   gungnir_throw: [["item.trident.throw", 1.1, 0.82], ["mob.evocation_illager.cast_spell", 0.35, 1.6]],
   gungnir_recall: [["item.trident.return", 1.1, 0.82], ["random.orb", 0.45, 1.2]],
   gungnir_impact: [["mob.evocation_illager.cast_spell", 0.8, 1.8], ["random.explode", 0.35, 1.4]],
@@ -92,6 +95,7 @@ const SOUND_LAYERS = {
   thanos_sword_bounce: [["random.anvil_land", 0.5, 1.35], ["item.trident.hit_ground", 0.7, 0.8]],
   thanos_sword_recall: [["item.trident.return", 1.0, 0.65], ["random.anvil_land", 0.25, 1.25]],
   weapon_impact: [["random.explode", 0.7, 1.15], ["item.trident.hit_ground", 0.9, 0.7]],
+  gungnir_fire: [["mob.ghast.shoot", 1.0, 1.0], ["mob.evocation_illager.cast_spell", 0.4, 1.4]],
 };
 
 function playWeaponSound(dimension, cue, location) {
@@ -272,6 +276,43 @@ function beginThunder(player, power) {
   }, 600);
 }
 
+function launchGungnirFire(player) {
+  const head = player.getHeadLocation();
+  const view = player.getViewDirection();
+  const dir = normalize(view);
+  const start = {
+    x: head.x + dir.x * 1.5,
+    y: head.y - 0.1,
+    z: head.z + dir.z * 1.5,
+  };
+  const speed = 1.8;
+  try {
+    const fireball = player.dimension.spawnEntity("minecraft:fireball", start);
+    const component = fireball.getComponent("minecraft:projectile");
+    if (component) {
+      component.owner = player;
+      component.shoot(
+        { x: dir.x * speed, y: dir.y * speed, z: dir.z * speed },
+        { uncertainty: 0 },
+      );
+    } else {
+      // Fallback: direct impulse if projectile component unavailable
+      try { fireball.applyImpulse({ x: dir.x * speed, y: dir.y * speed, z: dir.z * speed }); } catch {}
+    }
+    playWeaponSound(player.dimension, "gungnir_fire", start);
+    particle(player.dimension, "minecraft:large_explosion", start);
+    player.onScreenDisplay.setActionBar("§6Gungnir §c— Ghast fire burst!");
+  } catch (e) {
+    // Last-resort: command-based fireball summon
+    try {
+      const x = start.x.toFixed(2), y = start.y.toFixed(2), z = start.z.toFixed(2);
+      player.dimension.runCommand(`summon minecraft:fireball ${x} ${y} ${z}`);
+      playWeaponSound(player.dimension, "gungnir_fire", start);
+      player.onScreenDisplay.setActionBar("§6Gungnir §c— Ghast fire burst!");
+    } catch {}
+  }
+}
+
 function launch(player, type, itemStack) {
   if (activeThrowByPlayer.has(player.id)) {
     player.onScreenDisplay.setActionBar(
@@ -338,28 +379,68 @@ function useWeapon(event) {
   const id = event.itemStack?.typeId;
   if (!player || !id) return;
   if (id === `${NS}:mjolnir`) {
+    // Right-click = throw (returns); Sneak + right-click = aimed lightning
     if (player.isSneaking) {
       if (!tryWeaponCooldown(player, "mjolnir_lightning")) return;
       beginThunder(player, "mjolnir");
+    } else {
+      launch(player, "mjolnir", event.itemStack);
     }
-    else launch(player, "mjolnir", event.itemStack);
   } else if (id === `${NS}:stormbreaker`) {
+    // Right-click = throw (returns); Sneak + right-click = aimed thunder
     if (player.isSneaking) {
       if (!tryWeaponCooldown(player, "stormbreaker_lightning")) return;
       beginThunder(player, "stormbreaker");
+    } else {
+      launch(player, "stormbreaker", event.itemStack);
     }
-    else launch(player, "stormbreaker", event.itemStack);
   } else if (id === `${NS}:captain_shield`) {
+    // Sneak = shield-raise / block mode; right-click (no sneak) = throw
+    if (player.isSneaking) return;
     launch(player, "shield", event.itemStack);
   } else if (id === `${NS}:gungnir`) {
-    if (!tryWeaponCooldown(player, "gungnir_throw")) return;
-    launch(player, "gungnir", event.itemStack);
+    // Right-click = ghast fire burst; Sneak + right-click = throw (returns)
+    if (player.isSneaking) {
+      if (!tryWeaponCooldown(player, "gungnir_throw")) return;
+      launch(player, "gungnir", event.itemStack);
+    } else {
+      if (!tryWeaponCooldown(player, "gungnir_fire")) return;
+      launchGungnirFire(player);
+    }
   } else if (id === `${NS}:thanos_double_edge_sword`) {
     launch(player, "thanos_sword", event.itemStack);
   }
 }
 
 world.afterEvents.itemUse.subscribe(useWeapon);
+
+// ── Shield blocking ────────────────────────────────────────────────────────
+// While the player is sneaking AND holding Captain's Shield (main or offhand),
+// cancel all incoming damage — including warden sonic boom — and play feedback.
+world.beforeEvents.entityHurt.subscribe((event) => {
+  const entity = event.hurtEntity;
+  if (!valid(entity) || entity.typeId !== "minecraft:player") return;
+  const player = entity;
+  if (!player.isSneaking) return;
+  try {
+    const equipment = player.getComponent("minecraft:equippable");
+    const mainHand = equipment?.getEquipment(EquipmentSlot.Mainhand);
+    const offHand  = equipment?.getEquipment(EquipmentSlot.Offhand);
+    const hasShield =
+      mainHand?.typeId === `${NS}:captain_shield` ||
+      offHand?.typeId  === `${NS}:captain_shield`;
+    if (!hasShield) return;
+    event.cancel = true;
+    system.run(() => {
+      try {
+        const loc = player.location;
+        playWeaponSound(player.dimension, "shield_block", loc);
+        particle(player.dimension, "minecraft:critical_hit_emitter", player.getHeadLocation());
+        player.onScreenDisplay.setActionBar("§9Shield §a— Blocked!");
+      } catch {}
+    });
+  } catch {}
+});
 
 function isRicochetWeapon(type) {
   return type === "shield" || type === "thanos_sword";
@@ -658,7 +739,6 @@ function bossPulse(boss) {
     timer.shot = 0;
     try {
       const start = boss.getHeadLocation();
-      const bolt = boss.dimension.spawnEntity(`${NS}:cat_bolt`, start);
       const aim = normalize(
         subtract(
           {
@@ -669,15 +749,46 @@ function bossPulse(boss) {
           start,
         ),
       );
+
+      // Randomly pick one of four attack types each time
+      const roll = Math.random();
+      let projectileId, speed, uncertainty, soundCmd;
+      if (roll < 0.25) {
+        // Current cat bolt
+        projectileId = `${NS}:cat_bolt`;
+        speed = 1.35;
+        uncertainty = 1.5;
+        soundCmd = `playsound mob.warden.sonic_boom @a[r=48] ${start.x} ${start.y} ${start.z} 0.7 1.25`;
+      } else if (roll < 0.5) {
+        // Wither skull (wither projectile)
+        projectileId = "minecraft:wither_skull";
+        speed = 1.1;
+        uncertainty = 1.0;
+        soundCmd = `playsound mob.wither.shoot @a[r=48] ${start.x} ${start.y} ${start.z} 1.0 0.9`;
+      } else if (roll < 0.75) {
+        // Warden echo — wind charge projectile
+        projectileId = "minecraft:wind_charge_projectile";
+        speed = 2.0;
+        uncertainty = 0.4;
+        soundCmd = `playsound mob.warden.sonic_boom @a[r=48] ${start.x} ${start.y} ${start.z} 1.0 1.6`;
+      } else {
+        // Ghast fire
+        projectileId = "minecraft:fireball";
+        speed = 1.2;
+        uncertainty = 1.2;
+        soundCmd = `playsound mob.ghast.shoot @a[r=48] ${start.x} ${start.y} ${start.z} 0.8 1.0`;
+      }
+
+      const bolt = boss.dimension.spawnEntity(projectileId, start);
       const component = bolt.getComponent("minecraft:projectile");
-      component.owner = boss;
-      component.shoot(
-        { x: aim.x * 1.35, y: aim.y * 1.35, z: aim.z * 1.35 },
-        { uncertainty: 1.5 },
-      );
-      boss.dimension.runCommand(
-        `playsound mob.warden.sonic_boom @a[r=48] ${start.x} ${start.y} ${start.z} 0.7 1.25`,
-      );
+      if (component) {
+        component.owner = boss;
+        component.shoot(
+          { x: aim.x * speed, y: aim.y * speed, z: aim.z * speed },
+          { uncertainty },
+        );
+      }
+      boss.dimension.runCommand(soundCmd);
     } catch {}
   }
   if (timer.summon >= 220) {

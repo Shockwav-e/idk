@@ -3,7 +3,8 @@
   "minecraft:client_entity": { "description": {
     "identifier": "chim_marvel:shield_projectile", "materials": { "default": "entity_alphatest" },
     "textures": { "default": "textures/entity/captain_shield" }, "geometry": { "default": "geometry.chim_marvel.shield_projectile" },
-    "animations": { "spin": "animation.chim_marvel.spin" }, "scripts": { "animate": ["spin"] },
+    "animations": { "spin": "animation.chim_marvel.shield_projectile_spin" },
+    "scripts": { "animate": ["spin"] },
     "render_controllers": ["controller.render.default"]
   } }
 }

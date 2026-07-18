@@ -16,8 +16,7 @@
       "minecraft:damage_absorption": { "absorbable_causes": ["anvil", "blockExplosion", "charging", "contact", "entityAttack", "entityExplosion", "fallingBlock", "fireworks", "lightning", "magic", "magma", "projectile", "ramAttack", "sonicBoom", "stalactite", "stalagmite", "thorns", "wither"] },
       "minecraft:cooldown": { "category": "chim_shield", "duration": 0.05 },
       "minecraft:use_animation": "spear",
-      "minecraft:use_modifiers": { "use_duration": 0.12, "movement_modifier": 0.9 },
-      "minecraft:interact_button": "Throw Shield"
+      "minecraft:use_modifiers": { "use_duration": 0.12, "movement_modifier": 0.9 }
     }
   }
 }

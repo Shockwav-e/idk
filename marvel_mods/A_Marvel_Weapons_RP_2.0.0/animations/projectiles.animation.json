@@ -1,24 +1,30 @@
 {
   "format_version": "1.8.0",
   "animations": {
+
     "animation.chim_marvel.spin": {
       "loop": true,
       "animation_length": 1,
       "bones": {
-        "weapon": {
-          "rotation": [-90, "q.life_time * 900", 0]
-        }
+        "weapon": { "rotation": [-90, "q.life_time * 900", 0] }
       }
     },
+
     "animation.chim_marvel.stormbreaker_fly": {
       "loop": true,
       "animation_length": 0.5,
       "bones": {
-        "weapon": {
-          "rotation": [0, 90, 0]
-        }
+        "weapon": { "rotation": ["q.life_time * 720", 0, 0] }
       }
     },
+
+    "animation.chim_marvel.shield_projectile_spin": {
+      "loop": true,
+      "bones": {
+        "weapon": { "rotation": [90, "q.life_time * 1440", 0] }
+      }
+    },
+
     "animation.chim_marvel.pulse": {
       "loop": true,
       "animation_length": 1,
@@ -32,6 +38,7 @@
         }
       }
     },
+
     "animation.chim_marvel.mjolnir_first_person": {
       "loop": true,
       "bones": {
@@ -42,6 +49,7 @@
         }
       }
     },
+
     "animation.chim_marvel.mjolnir_third_person": {
       "loop": true,
       "bones": {
@@ -52,26 +60,47 @@
         }
       }
     },
+
     "animation.chim_marvel.mjolnir_use": {
       "animation_length": 0.9167,
       "bones": {
         "weapon": {
           "rotation": {
-            "0.0": [0, 0, 0],
-            "0.1667": [52.94218, -3.80493, -25.14918],
-            "0.5417": [52.94218, -3.80493, -25.14918],
+            "0.0":    [0, 0, 0],
+            "0.1667": [52.94, -3.80, -25.15],
+            "0.5417": [52.94, -3.80, -25.15],
             "0.9167": [0, 0, 0]
           },
           "position": {
-            "0.0": { "post": [0, 0, 0], "lerp_mode": "catmullrom" },
+            "0.0":    { "post": [0, 0, 0],       "lerp_mode": "catmullrom" },
             "0.0833": { "post": [3.5, -10, -0.5], "lerp_mode": "catmullrom" },
-            "0.1667": { "post": [9, -12, 2], "lerp_mode": "catmullrom" },
-            "0.25": { "post": [9, -12, 2], "lerp_mode": "catmullrom" },
+            "0.1667": { "post": [9, -12, 2],      "lerp_mode": "catmullrom" },
+            "0.25":   { "post": [9, -12, 2],      "lerp_mode": "catmullrom" },
             "0.9167": [0, 0, 0]
           }
         }
       }
     },
+
+    "animation.chim_marvel.mjolnir_swing": {
+      "loop": true,
+      "bones": {
+        "weapon": {
+          "rotation": [
+            "90 + math.sin(q.swing_progress * 180) * -105",
+            "-5 + math.sin(q.swing_progress * 180) * 22",
+            "math.sin(q.swing_progress * 180) * -18"
+          ],
+          "position": [
+            "1.5 + math.sin(q.swing_progress * 180) * -4",
+            "-3 + math.sin(q.swing_progress * 180) * -9",
+            "3.5 + math.sin(q.swing_progress * 180) * 5"
+          ],
+          "scale": 0.62
+        }
+      }
+    },
+
     "animation.chim_marvel.stormbreaker_first_person": {
       "loop": true,
       "bones": {
@@ -82,6 +111,7 @@
         }
       }
     },
+
     "animation.chim_marvel.stormbreaker_third_person": {
       "loop": true,
       "bones": {
@@ -92,6 +122,46 @@
         }
       }
     },
+
+    "animation.chim_marvel.stormbreaker_use": {
+      "animation_length": 0.5,
+      "bones": {
+        "weapon": {
+          "rotation": {
+            "0.0":  { "post": [0, 0, 0],     "lerp_mode": "catmullrom" },
+            "0.15": { "post": [45, -20, -15], "lerp_mode": "catmullrom" },
+            "0.35": { "post": [60, -15, -20], "lerp_mode": "catmullrom" },
+            "0.5":  [0, 0, 0]
+          },
+          "position": {
+            "0.0":  { "post": [0, 0, 0],   "lerp_mode": "catmullrom" },
+            "0.15": { "post": [4, -8, 1],  "lerp_mode": "catmullrom" },
+            "0.35": { "post": [6, -10, 2], "lerp_mode": "catmullrom" },
+            "0.5":  [0, 0, 0]
+          }
+        }
+      }
+    },
+
+    "animation.chim_marvel.stormbreaker_swing": {
+      "loop": true,
+      "bones": {
+        "weapon": {
+          "rotation": [
+            "90 + math.sin(q.swing_progress * 180) * -110",
+            "-8 + math.sin(q.swing_progress * 180) * 26",
+            "math.sin(q.swing_progress * 180) * -22"
+          ],
+          "position": [
+            "1.75 + math.sin(q.swing_progress * 180) * -5",
+            "-3.5 + math.sin(q.swing_progress * 180) * -10",
+            "4 + math.sin(q.swing_progress * 180) * 6"
+          ],
+          "scale": 0.56
+        }
+      }
+    },
+
     "animation.chim_marvel.gungnir_first_person": {
       "loop": true,
       "animation_length": 3,
@@ -106,15 +176,55 @@
         }
       }
     },
+
     "animation.chim_marvel.gungnir_third_person": {
       "loop": true,
-      "animation_length": 3,
       "bones": {
         "weapon": {
-          "rotation": [0, 0, 0]
+          "rotation": [0, 0, -15],
+          "position": [0, -1, 0]
         }
       }
     },
+
+    "animation.chim_marvel.gungnir_use": {
+      "animation_length": 0.5,
+      "bones": {
+        "weapon": {
+          "rotation": {
+            "0.0":  { "post": [0, 0, 0],     "lerp_mode": "catmullrom" },
+            "0.12": { "post": [20, -5, -8],  "lerp_mode": "catmullrom" },
+            "0.32": { "post": [50, -8, -12], "lerp_mode": "catmullrom" },
+            "0.5":  [0, 0, 0]
+          },
+          "position": {
+            "0.0":  { "post": [0, 0, 0],    "lerp_mode": "catmullrom" },
+            "0.12": { "post": [-1, -3, -2], "lerp_mode": "catmullrom" },
+            "0.32": { "post": [1, -7, 3],   "lerp_mode": "catmullrom" },
+            "0.5":  [0, 0, 0]
+          }
+        }
+      }
+    },
+
+    "animation.chim_marvel.gungnir_swing": {
+      "loop": true,
+      "bones": {
+        "weapon": {
+          "rotation": [
+            "90 + math.sin(q.swing_progress * 180) * -90",
+            "-3 + math.sin(q.swing_progress * 180) * 16",
+            "math.sin(q.swing_progress * 180) * -14"
+          ],
+          "position": [
+            "1.5 + math.sin(q.swing_progress * 180) * -3",
+            "-3.0 + math.sin(q.swing_progress * 180) * -7",
+            "3.5 + math.sin(q.swing_progress * 180) * 6"
+          ]
+        }
+      }
+    },
+
     "animation.chim_marvel.shield_first_person": {
       "loop": true,
       "animation_length": 2,
@@ -125,10 +235,11 @@
             "-3.0 + math.sin(q.life_time * 80) * 0.06",
             3.5
           ],
-          "rotation": [15, -85, 5]
+          "rotation": [90, -85, 5]
         }
       }
     },
+
     "animation.chim_marvel.shield_third_person": {
       "loop": true,
       "animation_length": 2,
@@ -138,34 +249,61 @@
         }
       }
     },
+
+    "animation.chim_marvel.shield_block": {
+      "loop": true,
+      "bones": {
+        "weapon": {
+          "rotation": [90, -30, 5],
+          "position": [0, -2.5, 4.5]
+        }
+      }
+    },
+
+    "animation.chim_marvel.shield_swing": {
+      "loop": true,
+      "bones": {
+        "weapon": {
+          "rotation": [
+            "90 + math.sin(q.swing_progress * 180) * 22",
+            "-85 + math.sin(q.swing_progress * 180) * -60",
+            "5 + math.sin(q.swing_progress * 180) * -14"
+          ],
+          "position": [
+            "1.5 + math.sin(q.swing_progress * 180) * 9",
+            "-3.0 + math.sin(q.swing_progress * 180) * -3",
+            "3.5 + math.sin(q.swing_progress * 180) * 2"
+          ]
+        }
+      }
+    },
+
     "animation.chim_marvel.mjolnir_projectile_fly": {
       "loop": true,
       "animation_length": 0.5,
       "bones": {
-        "weapon": {
-          "rotation": [90, 0, 0]
-        }
+        "weapon": { "rotation": [90, "q.life_time * 720", 0] }
       }
     },
+
     "animation.chim_marvel.gungnir_projectile_fly": {
       "loop": true,
-      "animation_length": 0.5,
       "bones": {
-        "weapon": {
-          "rotation": [90, 0, 0]
-        }
+        "weapon": { "rotation": [0, "q.life_time * 360", 0] }
       }
     },
+
     "animation.chim_marvel.thanos_sword_first_person": {
       "loop": true,
       "bones": {
         "weapon": {
-          "rotation": [79, 120, -240],
+          "rotation": [90, 120, -240],
           "position": [3, 29, 11],
           "scale": 1.5
         }
       }
     },
+
     "animation.chim_marvel.thanos_sword_third_person": {
       "loop": true,
       "bones": {
@@ -176,19 +314,20 @@
         }
       }
     },
+
     "animation.chim_marvel.thanos_sword_use": {
       "animation_length": 0.583,
       "bones": {
         "weapon": {
           "rotation": {
-            "0.0": { "post": [0, 0, 0], "lerp_mode": "catmullrom" },
-            "0.25": { "post": [0, 50, 0], "lerp_mode": "catmullrom" },
+            "0.0": { "post": [0, 0, 0],    "lerp_mode": "catmullrom" },
+            "0.25": { "post": [0, 50, 0],  "lerp_mode": "catmullrom" },
             "0.5": [0, 0, 0]
           },
           "position": {
-            "0.0": { "post": [0, 0, 0], "lerp_mode": "catmullrom" },
+            "0.0":  { "post": [0, 0, 0],    "lerp_mode": "catmullrom" },
             "0.25": { "post": [9, -25, 0], "lerp_mode": "catmullrom" },
-            "0.5": [0, 0, 0]
+            "0.5":  [0, 0, 0]
           }
         },
         "pivot": {
@@ -198,6 +337,29 @@
           }
         }
       }
+    },
+
+    "animation.chim_marvel.thanos_sword_melee": {
+      "loop": true,
+      "bones": {
+        "pivot": {
+          "rotation": ["math.sin(q.swing_progress * 180) * -720", 0, 0]
+        },
+        "weapon": {
+          "rotation": [
+            "90 + math.sin(q.swing_progress * 180) * -55",
+            "120 + math.sin(q.swing_progress * 180) * 18",
+            "-240 + math.sin(q.swing_progress * 180) * -12"
+          ],
+          "position": [
+            "3 + math.sin(q.swing_progress * 180) * -2",
+            "29 + math.sin(q.swing_progress * 180) * -20",
+            "11 + math.sin(q.swing_progress * 180) * 8"
+          ],
+          "scale": 1.5
+        }
+      }
     }
+
   }
 }
